@@ -32,7 +32,7 @@ bool fill_sudoku(Subject_sudoku* sudoku, int solution[SIZE * SIZE]){ // -- succe
 	return guess_value(box, sudoku, solution);
 }
 
-bool solve_sudoku(int puzzle[SIZE * SIZE], int solution[SIZE * SIZE]) {
+bool Core::solve(int puzzle[SIZE * SIZE], int solution[SIZE * SIZE]) {
 	Subject_sudoku* sudoku;
 	sudoku = new Subject_sudoku(puzzle);
 	if (!fill_sudoku(sudoku, solution)) {
@@ -42,7 +42,19 @@ bool solve_sudoku(int puzzle[SIZE * SIZE], int solution[SIZE * SIZE]) {
 	return true;
 }
 
-int main3() {
+bool Core::solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int number) {
+	Subject_sudoku* sudoku;
+	for (int i = 0; i < number; i++) {
+		sudoku = new Subject_sudoku(puzzle[i]);
+		if (!fill_sudoku(sudoku, solution[i])) {
+			return false;
+		};
+		delete(sudoku);
+		return true;
+	}
+}
+
+/*int main3() {
 	int mat_input[SIZE*SIZE] =
 	{
 		1, 2, 3, 0, 0, 0, 0, 0, 0,
@@ -61,4 +73,4 @@ int main3() {
 	cout << solution << endl;
 	getchar();
 	return 0;
-}
+}*/

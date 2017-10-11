@@ -6,24 +6,55 @@
 
 #define FREE_GRIDS_COUNT 55
 #define GET_GRID_WITH_BLOCKNO(blockno, position) (((blockno / 3) * 3 + position / 3) * 9 + ((blockno % 3) * 3 + position % 3))
+#define LOWER_MIN 20
+#define UPPER_MAX 55
+
+#define DIFFICULTY_COUNT 3
+#define LOWERS {30, 40, 48}
+#define UPPERS {39, 47, 55}
 
 using namespace std;
 
+void Core::generate(int number, int mode, int result[][SIZE * SIZE]) {
+	int lowers[DIFFICULTY_COUNT] = LOWERS;
+	int uppers[DIFFICULTY_COUNT] = UPPERS;
+	int lower = lowers[mode];
+	int upper = uppers[mode];
 
-int get_difficulty_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE], int difficulty = 0) {
-	
-	
-	return 0;
+	for (int i = 0; i < SIZE; i++) {
+		get_unique_solution_puzzle(result[i], lower, upper);
+	}
 }
 
+void Core::generate(int number, int lower, int upper, bool unique, int result[][SIZE * SIZE]) {
+	if (lower < LOWER_MIN || upper > UPPER_MAX || lower > upper) {
+		// Exception
+		cout << "Error" << endl;
+		return;
+	}
+	if (unique) {
+		for (int i = 0; i < number; i++) {
+			get_unique_solution_puzzle(result[i], lower, upper);
+		}
+	}
+	else {
+		for (int i = 0; i < number; i++) {
+			get_puzzle(result[i], lower, upper);
+		}
+	}
+}
 
 //__declspec(dllexport)
-int get_unique_solution_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
-	int min_freebox_num, int max_freebox_num) {
+int get_unique_solution_puzzle(int puzzle[SIZE * SIZE],
+	int lower, int upper, int sudoku[SIZE * SIZE]) {
 	bool unique;
 	int all_freebox_num;
 	do {
-		all_freebox_num = get_puzzle(sudoku, puzzle, min_freebox_num, max_freebox_num);
+		if (sudoku == NULL) {
+			all_freebox_num = get_puzzle(puzzle, lower, upper);
+		}else {
+			all_freebox_num = get_puzzle(sudoku, puzzle, lower, upper);
+		}
 		Subject_sudoku* sub_sudoku = new Subject_sudoku(puzzle);
 		int solution_counter = 0;
 		unique = generator_fill_sudoku(sub_sudoku, solution_counter);
@@ -33,8 +64,22 @@ int get_unique_solution_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 }
 
 
+/*int get_unique_solution_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
+	bool unique;
+	int all_freebox_num;
+	do {
+		all_freebox_num = get_puzzle(puzzle, lower, upper);
+		Subject_sudoku* sub_sudoku = new Subject_sudoku(puzzle);
+		int solution_counter = 0;
+		unique = generator_fill_sudoku(sub_sudoku, solution_counter);
+		delete sub_sudoku;
+	} while (!unique);
+	return all_freebox_num;
+}*/
+
+
 int get_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE], 
-	int min_freebox_num, int max_freebox_num) {
+	int lower, int upper) {
 	do {
 		for (int i = 0; i < SIZE*SIZE; i++) { // initialize
 			sudoku[i] = 0;
@@ -44,7 +89,18 @@ int get_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 	for (int i = 0; i < SIZE* SIZE; i++) { // copy to puzzle
 		puzzle[i] = sudoku[i];
 	}
-	return create_puzzle(puzzle, min_freebox_num, max_freebox_num); // clean grids
+	return create_puzzle(puzzle, lower, upper); // clean grids
+}
+
+
+int get_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
+	do {
+		for (int i = 0; i < SIZE*SIZE; i++) { // initialize
+			puzzle[i] = 0;
+		}
+		set_number_randomly(puzzle); // set numbers
+	} while (!create_final_sudoku(puzzle)); // create final sudoku
+	return create_puzzle(puzzle, lower, upper); // clean grids
 }
 
 
@@ -140,64 +196,7 @@ cout << generator_solve_sudoku(puzzle, targets, puzzle_template) << endl;
 getchar();
 }*/
 
-int main() {
-	int sudoku[81] = { 0 };
-	int puzzle[81] = { 0 };
-	FILE* fsudoku;
-	FILE* fpuzzle;
-	fopen_s(&fsudoku, "solution_55.txt", "w");
-	fopen_s(&fpuzzle, "puzzle_55.txt", "w");
-	
-	srand((int)time(0));
 
-	double dur;
-	clock_t start, end;
-	start = clock();
-
-	for (int i = 0; i < 100; i++) {
-		get_unique_solution_puzzle(sudoku, puzzle, 55, 55);
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
-				fputc(sudoku[i * 9 + j] + '0', fsudoku);
-				fputc(' ', fsudoku);
-				fputc(puzzle[i * 9 + j] + '0', fpuzzle);
-				fputc(' ', fpuzzle);
-			}
-			fputc('\n', fsudoku);
-			fputc('\n', fpuzzle);
-		}
-		fputc('\n', fsudoku);
-		fputc('\n', fpuzzle);
-		/*if (i % 100 == 0)*/
-		cout << i <<endl;
-	}
-	
-
-	end = clock();
-	dur = (double)(end - start);
-	printf("Use Time:%f\n", (dur / CLOCKS_PER_SEC));
-
-
-	//cout << "06" << endl;
-	//cout << "OK";
-	//cout << "OK" << sudoku[0];
-	
-	
-
-
-	
-	/*
-	int solution[SIZE * SIZE];
-	
-	solve_sudoku(puzzle, solution);
-
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-			cout << solution[i * 9 + j] << ' ';
-		}
-		cout << endl;
-	}*/
-}
 
 
 

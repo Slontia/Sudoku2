@@ -33,7 +33,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -132,7 +132,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -147,7 +147,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="box.h" />
+    <ClInclude Include="core.h" />
     <ClInclude Include="create.h" />
+    <ClInclude Include="exceptions.h" />
+    <ClInclude Include="exchanger.h" />
     <ClInclude Include="group.h" />
     <ClInclude Include="mode_generatror.h" />
     <ClInclude Include="puzzle_creator.h" />
@@ -161,7 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="box.cpp" />
+    <ClCompile Include="core.cpp" />
     <ClCompile Include="create.cpp" />
+    <ClCompile Include="exchanger.cpp" />
     <ClCompile Include="group.cpp" />
     <ClCompile Include="mode_generator.cpp" />
     <ClCompile Include="puzzle_creator.cpp" />

@@ -5,6 +5,7 @@
 //#include "../Sudoku2/solve.cpp"
 //#include "../Sudoku2/subject_sudoku.cpp"
 #include <qdebug>
+//#include 
 
 SudokuGUI::SudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
@@ -201,6 +202,7 @@ void SudokuGUI::set_number(int x) {
 
 
 void SudokuGUI::new_game(int difficulty) {
+	
 	this->remaining_grid_number = get_puzzle(difficulty, sudoku, puzzle); // Here difficulty
 	int index = 0;
 	int digit;

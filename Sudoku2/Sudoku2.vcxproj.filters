@@ -54,6 +54,15 @@
     <ClInclude Include="puzzle_creator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="core.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="exchanger.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="exceptions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -90,6 +99,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="puzzle_creator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="exchanger.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="core.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

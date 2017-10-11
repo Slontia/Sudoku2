@@ -12,6 +12,7 @@
 
 #define BUFFER_SIZE 1'000'000
 #define SIZE 9
+#define BLOCK_SIZE 3
 #define GET_POS(ROWNO, COLUMNNO) ((ROWNO)*SIZE + (COLUMNNO))
 #define GET_BLOCKNO(ROWNO, COLUMNNO) (ROWNO / 3) * 3 + (COLUMNNO / 3)
 
@@ -35,5 +36,8 @@ using namespace std;
 #include "create.h"
 #include "solve.h"
 #include "mode_generatror.h"
+#include "core.h"
+#include "exchanger.h"
+#include "puzzle_creator.h"
 
 #endif

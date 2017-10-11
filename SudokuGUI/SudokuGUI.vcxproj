@@ -115,6 +115,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core.h" />
     <ClInclude Include="difficulty.h" />
     <ClInclude Include="GeneratedFiles\ui_SudokuGUI.h" />
     <CustomBuild Include="timer.h">
@@ -139,6 +140,12 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sudoku2.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Sudoku2.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

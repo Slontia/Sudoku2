@@ -18,10 +18,10 @@ using namespace std;
 void Core::generate(int number, int mode, int result[][SIZE * SIZE]) {
 	int lowers[DIFFICULTY_COUNT] = LOWERS;
 	int uppers[DIFFICULTY_COUNT] = UPPERS;
-	int lower = lowers[mode];
-	int upper = uppers[mode];
+	int lower = lowers[mode - 1];
+	int upper = uppers[mode - 1];
 
-	for (int i = 0; i < SIZE; i++) {
+	for (int i = 0; i < number; i++) {
 		get_unique_solution_puzzle(result[i], lower, upper);
 	}
 }
@@ -44,7 +44,6 @@ void Core::generate(int number, int lower, int upper, bool unique, int result[][
 	}
 }
 
-//__declspec(dllexport)
 int get_unique_solution_puzzle(int puzzle[SIZE * SIZE],
 	int lower, int upper, int sudoku[SIZE * SIZE]) {
 	bool unique;

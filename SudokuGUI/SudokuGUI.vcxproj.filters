@@ -76,17 +76,17 @@
     <ClInclude Include="difficulty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core.h">
+    <ClInclude Include="..\Sudoku2\core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Sudoku2.dll">
+    <None Include="sudoku2.dll">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Sudoku2.lib">
+    <Library Include="sudoku2.lib">
       <Filter>Source Files</Filter>
     </Library>
   </ItemGroup>

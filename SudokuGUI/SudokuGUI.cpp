@@ -5,7 +5,7 @@
 //#include "../Sudoku2/solve.cpp"
 //#include "../Sudoku2/subject_sudoku.cpp"
 #include <qdebug>
-//#include 
+#include "core.h"
 
 SudokuGUI::SudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
@@ -18,7 +18,7 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 	create_grids();
 	create_input_buttons();
 	create_func_buttons();
-	disable_buttons();
+	//disable_buttons();
 	/* best time */
 	/* timer */
 	QLCDNumber* time_lcd = new QLCDNumber(this);
@@ -202,10 +202,49 @@ void SudokuGUI::set_number(int x) {
 
 
 void SudokuGUI::new_game(int difficulty) {
+	FILE* fout;
+	Core core;
+
+	this->remaining_grid_number = 0;
+	int puzzle_receiver[1][SIZE*SIZE];
+	int solution[SIZE * SIZE] = {0};
+
+	core.generate(1, 55, 55, true, puzzle_receiver);
+	//core.generate(1, difficulty, puzzle_receiver);
+
 	
-	this->remaining_grid_number = get_puzzle(difficulty, sudoku, puzzle); // Here difficulty
+	fout = fopen("C:/Users/65486/Desktop/debug.txt", "w");
+	for (int i = 0; i < SIZE; i++) {
+		for (int j = 0; j < SIZE; j++) {
+			this->puzzle[GET_GRIDNO(i, j)] = puzzle_receiver[0][GET_GRIDNO(i, j)];
+			fputc(puzzle[GET_GRIDNO(i, j)] + '0', fout);
+		}
+		fputc('\n', fout);
+	}
+	fputc('\n', fout);
+
+	core.solve(puzzle_receiver[0], solution);
+
+	for (int i = 0; i < SIZE; i++) {
+		for (int j = 0; j < SIZE; j++) {
+			//this->puzzle[GET_GRIDNO(i, j)] = puzzle_receiver[0][GET_GRIDNO(i, j)];
+			//fputc(sudoku[GET_GRIDNO(i, j)] + '0', fout);
+			fprintf(fout, "%d", solution[GET_GRIDNO(i, j)]);
+		}
+		fputc('\n', fout);
+	}
+	fputc('\n', fout);
+
+	fclose(fout);
+
+
+	
 	int index = 0;
 	int digit;
+
+
+
+
 	QPushButton* btn;
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
@@ -226,8 +265,11 @@ void SudokuGUI::new_game(int difficulty) {
 			}
 		}
 	}
+
 	enable_buttons();
+
 	timer->start();
+
 	curbtn = NULL;
 }
 

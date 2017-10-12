@@ -1,6 +1,6 @@
 #pragma once
 
 #define DIFFICULTIES_COUNT 3
-#define EASY 0
-#define NORMAL 1
-#define HARD 2
+#define EASY 1
+#define NORMAL 2
+#define HARD 3

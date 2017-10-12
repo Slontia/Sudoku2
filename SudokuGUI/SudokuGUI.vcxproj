@@ -115,7 +115,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core.h" />
+    <ClInclude Include="..\Sudoku2\core.h" />
     <ClInclude Include="difficulty.h" />
     <ClInclude Include="GeneratedFiles\ui_SudokuGUI.h" />
     <CustomBuild Include="timer.h">
@@ -142,10 +142,10 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Sudoku2.dll" />
+    <Library Include="sudoku2.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Sudoku2.lib" />
+    <None Include="sudoku2.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

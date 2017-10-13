@@ -51,25 +51,23 @@ namespace Sudoku2Test
 		TEST_METHOD(solve)
 		{
 			// TODO: 在此输入测试代码
-			int mat_input[SIZE*SIZE] =
-			{
-				1, 2, 3, 0, 0, 0, 0, 0, 0,
-				4, 5, 6, 0, 0, 0, 0, 0, 0,
-				7, 8, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0
-			};
-			test_s(mat_input, true);
+			Core core;
+			int number = 100;
+			core.generate(number, 3, result_solve);
+			for (int i = 0; i < number; i++) {
+				try {
+					test_s(result_solve[i], true);
+				}
+				catch (InvalidPuzzleException*) {
+					Assert::IsTrue(false);
+				}
+			}
 		}
 
-		TEST_METHOD(solve2)
+		TEST_METHOD(insolvable)
 		{
 			// TODO: 在此输入测试代码
-			int mat_input[SIZE*SIZE] =
+			int puzzle[SIZE*SIZE] =
 			{
 				1, 0, 0, 0, 0, 0, 0, 0, 0,
 				2, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -81,7 +79,35 @@ namespace Sudoku2Test
 				0, 0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 1, 2, 3, 4, 5, 6
 			};
-			test_s(mat_input, false);
+			try {
+				test_s(puzzle, false);
+			}
+			catch (InvalidPuzzleException*) {
+				Assert::IsTrue(false);
+			}
+		}
+
+		TEST_METHOD(invalid_puzzle) {
+			bool test_result = false;
+			int puzzle[SIZE*SIZE] =
+			{
+				1, 1, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 0, 0, 0
+			};
+			try {
+				test_s(puzzle, false);
+			}
+			catch (InvalidPuzzleException* e) {
+				test_result = true;
+			}
+			Assert::IsTrue(test_result);
 		}
 
 		TEST_METHOD(good_file) {

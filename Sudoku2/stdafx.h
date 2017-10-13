@@ -15,7 +15,9 @@
 #define BLOCK_SIZE 3				// -- the length of a block's side
 #define SOLVE_COUNT_MAX 1'000'000
 #define GET_POS(ROWNO, COLUMNNO) ((ROWNO)*SIZE + (COLUMNNO))
-#define GET_BLOCKNO(ROWNO, COLUMNNO) (ROWNO / 3) * 3 + (COLUMNNO / 3)
+#define GET_BLOCKNO(ROWNO, COLUMNNO) ((ROWNO) / 3) * 3 + ((COLUMNNO) / 3)
+#define GRIDNO_GET_ROWNO(gridno) ((gridno) / SIZE)
+#define GRIDNO_GET_COLNO(gridno) ((gridno) % SIZE)
 
 #include <iostream>  
 using namespace std;
@@ -51,5 +53,6 @@ using namespace std;
 #include "rank.h"
 
 #include "exceptions.h"
+#include "commands_reader.h"
 
 #endif

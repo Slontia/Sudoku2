@@ -37,7 +37,35 @@ bool fill_sudoku(Subject_sudoku* sudoku, int solution[SIZE * SIZE], bool unique)
 	return guess_value(box, sudoku, solution, unique);
 }
 
+
+void validity_judge(int puzzle[SIZE * SIZE]) {
+	bool row_digit_counter[SIZE][SIZE] = { 0 };
+	bool column_digit_counter[SIZE][SIZE] = { 0 };
+	bool block_digit_counter[SIZE][SIZE] = { 0 };
+	bool *set_row, *set_col, *set_block;
+
+	// store box 
+	for (int i = 0; i < SIZE*SIZE; i++) {
+		int digit = puzzle[i];
+		if (digit != 0) {
+			set_row = &row_digit_counter[GRIDNO_GET_ROWNO(i)][digit - 1];
+			set_col = &column_digit_counter[GRIDNO_GET_COLNO(i)][digit - 1];
+			set_block = &block_digit_counter
+				[GET_BLOCKNO(GRIDNO_GET_ROWNO(i), GRIDNO_GET_COLNO(i))][digit - 1];
+			if ((*set_row) || (*set_col) || (*set_block)) {
+				throw new InvalidPuzzleException();
+			}
+			else {
+				*set_row = true;
+				*set_col = true;
+				*set_block = true;
+			}
+		}
+	}
+}
+
 bool Core::solve(int puzzle[SIZE * SIZE], int solution[SIZE * SIZE]) {
+	validity_judge(puzzle);
 	Subject_sudoku* sudoku;
 	sudoku = new Subject_sudoku(puzzle);
 	if (!fill_sudoku(sudoku, solution, false)) {
@@ -53,10 +81,15 @@ int Core::solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int numb
 
 	int insolvable_counter = 0;
 	for (int i = 0; i < number; i++) {
-		if (solve(puzzle[i], solution[solutions_counter])) {
-			solutions_counter++;
+		try {
+			if (solve(puzzle[i], solution[solutions_counter])) {
+				solutions_counter++;
+			}
+			else {
+				insolvable_recorder[insolvable_counter++] = i;
+			}
 		}
-		else {
+		catch (InvalidPuzzleException*) {
 			insolvable_recorder[insolvable_counter++] = i;
 		}
 	}

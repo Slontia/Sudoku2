@@ -75,6 +75,9 @@
     <ClInclude Include="unitmaps.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="commands_reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -144,6 +147,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="exception.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="commands_reader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

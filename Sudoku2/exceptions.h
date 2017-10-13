@@ -33,4 +33,8 @@ public:
 	BadFileException(string info = DEFAULT_INFO) : Exception(info) {};
 };
 
+class InvalidPuzzleException : public Exception {
+public:
+	InvalidPuzzleException(string info = DEFAULT_INFO) : Exception(info) {};
+};
 

@@ -9,7 +9,7 @@
 
 #define DIFFICULTY_COUNT 3
 #define LOWERS {30, 40, 48}
-#define UPPERS {39, 47, 55}
+#define UPPERS {39, 47, 52}
 
 using namespace std;
 
@@ -99,18 +99,42 @@ bool create_final_sudoku(int sudoku[SIZE * SIZE]) {
 	return result;
 }
 
+//By hitaku
 int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 	int lower, int upper) {
 	if (lower > upper || lower < 0 || upper > SIZE * SIZE) {
 		return 0;
 	}
 	int all_freebox_num = (rand() % (upper - lower + 1)) + upper;
-	int freebox_num = all_freebox_num - dig(sudoku, puzzle, all_freebox_num);
+	int cleaned_num = dig(sudoku, puzzle, all_freebox_num);
+	int freebox_num = all_freebox_num - cleaned_num;
 
 	if (freebox_num == 0) {
 		return all_freebox_num;
 	}
 
+
+	/*bool cleaned_recorder[SIZE * SIZE] = { 0 };
+
+	for (int i = 0; i < SIZE * SIZE; i++) {
+		if (puzzle[i] == 0) {
+			cleaned_recorder[i] = true;
+		}
+	}
+
+	for (int i = 0; i < freebox_num; i++) {
+		int free_position = rand() % (SIZE * SIZE - cleaned_num);
+		int free_gird_index = 0;
+		int gridno;
+		for (gridno = 0; gridno < SIZE*SIZE; gridno++) {
+			if (!cleaned_recorder[gridno] && (free_position == free_gird_index++)) {
+				break;
+			}
+		}
+		puzzle[gridno] = 0;
+		cleaned_recorder[gridno] = true;
+	}*/
+	
 	int cleaned_recorder_int[SIZE] = { 0 }; // for blocks
 	int cleaned_counter[SIZE] = { 0 }; // for blocks
 	for (int blockno = 0; blockno < SIZE; blockno++) { // each block
@@ -147,7 +171,7 @@ int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 		cleaned_recorder_int[min_cleaned_blockno] |= (1 << digit_index);
 		cleaned_counter[min_cleaned_blockno]++;
 	}
-
+	return all_freebox_num;
 }
 
 
@@ -173,10 +197,7 @@ void clean_each_block_grids(int clean_count, int puzzle[SIZE * SIZE]) {
 	}
 }
 
-
-
-
-
+//By Slontia
 int create_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
 	if (lower > upper || lower < 0 || upper > SIZE * SIZE) {
 		return 0;

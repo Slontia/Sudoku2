@@ -142,10 +142,10 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\x64\Release\Sudoku2.dll" />
+    <None Include="..\x64\Release\Core.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\x64\Release\Sudoku2.lib" />
+    <Library Include="..\x64\Release\Core.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,8 +6,6 @@
 
 #define FREE_GRIDS_COUNT 55
 #define GET_GRID_WITH_BLOCKNO(blockno, position) (((blockno / 3) * 3 + position / 3) * 9 + ((blockno % 3) * 3 + position % 3))
-#define LOWER_MIN 20
-#define UPPER_MAX 55
 
 #define DIFFICULTY_COUNT 3
 #define LOWERS {30, 40, 48}
@@ -27,11 +25,6 @@ void Core::generate(int number, int mode, int result[][SIZE * SIZE]) {
 }
 
 void Core::generate(int number, int lower, int upper, bool unique, int result[][SIZE * SIZE]) {
-	if (lower < LOWER_MIN || upper > UPPER_MAX || lower > upper) {
-		// Exception
-		cout << "Error" << endl;
-		return;
-	}
 	if (unique) {
 		for (int i = 0; i < number; i++) {
 			get_unique_solution_puzzle(result[i], lower, upper);
@@ -127,8 +120,11 @@ void clean_each_block_grids(int clean_count, int puzzle[SIZE * SIZE]) {
 	}
 }
 
-int create_puzzle(int puzzle[SIZE * SIZE], int min_freebox_num, int max_freebox_num) {
-	int all_freebox_num = (rand() % (max_freebox_num - min_freebox_num + 1)) + min_freebox_num;
+int create_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
+	if (lower > upper || lower < 0 || upper > SIZE * SIZE) {
+		return 0;
+	}
+	int all_freebox_num = (rand() % (upper - lower + 1)) + upper;
 	int clean_block_grids_count = all_freebox_num / SIZE;
 	int freebox_num = all_freebox_num - SIZE * clean_block_grids_count;
 

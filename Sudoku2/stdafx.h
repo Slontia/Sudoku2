@@ -13,6 +13,7 @@
 #define BUFFER_SIZE 1'000'000
 #define SIZE 9
 #define BLOCK_SIZE 3				// -- the length of a block's side
+#define SOLVE_COUNT_MAX 1'000'000
 #define GET_POS(ROWNO, COLUMNNO) ((ROWNO)*SIZE + (COLUMNNO))
 #define GET_BLOCKNO(ROWNO, COLUMNNO) (ROWNO / 3) * 3 + (COLUMNNO / 3)
 
@@ -48,5 +49,7 @@ using namespace std;
 #include "fgmap.h"
 #include "dig.h"
 #include "rank.h"
+
+#include "exceptions.h"
 
 #endif

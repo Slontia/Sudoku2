@@ -4,6 +4,7 @@
 
 int result[SUDOKU_MAX][SIZE*SIZE];
 int puzzle[SUDOKU_MAX][SIZE*SIZE];
+int insolvable_recorder[SOLVE_COUNT_MAX];
 FILE* fout;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -117,18 +118,19 @@ namespace Sudoku2Test
 			core.generate(number, lower, upper, unique, result);
 			//core.output_file("sudoku.txt", result, number);
 			unique_solution_judge(number, result);
-			core.solve(result, result, number);
+			int solved_count = core.solve(result, result, number, insolvable_recorder);
+			Assert::AreEqual(number, solved_count);
 			repeated_judge(number, result);
 			//core.output_file("sudoku2.txt", result, number);
 		}
 
 
 		TEST_METHOD(create){
-			test_c(1000000);
+			test_c(10000);
 		}
 
 		TEST_METHOD(puzzle){
-			test_n(10000, 40, 48, true);
+			test_n(100, 40, 48, true);
 		}
 
 	};

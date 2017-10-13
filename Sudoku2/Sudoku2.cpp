@@ -35,14 +35,17 @@
 #define TO_GET_FILENAME 4
 
 #define SOLVE_ERROR "-s usage: '-s [filename]'"
-#define CREATE_ERROR "-c usage: '-c [1-1'000'000]'"
-#define PUZZLE_NUMBER_ERROR "-n -m usage: '-n [1-10'000] -r [20-55]~[20-55] [-u]'"
-#define PUZZLE_DIFFICULTY_ERROR "-n -r usage: 'sudoku.exe -n [1-10'000] -m [1-3]'"
-#define UNKNOWN_COMMAND_ERROR "unknown command"
+#define CREATE_ERROR "-c usage: '-c [number(1-1'000'000)]'"
+#define PUZZLE_NUMBER_ERROR "-n -m usage: '-n [number(1-10'000)] -r [lower(20-55)]~[upper(20-55)] [-u]'\n(lower <= upper)"
+#define PUZZLE_DIFFICULTY_ERROR "-n -r usage: 'sudoku.exe -n [number(1-10'000)] -m [mode(1-3)]'"
+#define UNKNOWN_COMMAND_ERROR "Unknown command!"
+#define FILE_ERROR "Cannot open the file! Please check the path."
 
 //#define BUFFER_SIZE 1'000
 #define CREATE_NUMBER_MAX 1'000'000
 #define PUZZLE_NUMBER_MAX 10'000
+#define LOWER_MIN 20
+#define UPPER_MAX 55
 
 #define OUTPUT_FILENAME "sudoku.txt"
 
@@ -54,7 +57,6 @@ bool set_mode(int* cur_mode, int set_mode) {
 		return true;
 	}
 	else {
-		cout << "Multiple or repeated modes!" << endl;
 		return false;
 	}
 }
@@ -65,7 +67,6 @@ bool set_puzzle_mode(int* cur_puzzle_mode, int set_puzzle_mode) {
 		return true;
 	}
 	else {
-		cout << "Multiple or repeated puzzle modes!" << endl;
 		return false;
 	}
 }
@@ -86,11 +87,17 @@ bool areValidModes(int mode, int puzzle_mode, bool unique) {
 	return true;
 }
 
-bool isValidNumber(int mode, int number) {
+bool isValidNumber(int mode, int puzzle_mode, int number, int lower, int upper) {
 	if (mode == CREATE && number > CREATE_NUMBER_MAX) {
 		return false;
 	}
 	else if (mode == PUZZLE && number > PUZZLE_NUMBER_MAX) {
+		return false;
+	}
+	else if (
+		puzzle_mode == PUZZLE_NUMBER &&
+		(upper < lower || lower < LOWER_MIN || upper > UPPER_MAX)
+	) {
 		return false;
 	}
 	return true;
@@ -99,19 +106,19 @@ bool isValidNumber(int mode, int number) {
 
 void exception_handle(int mode, int puzzle_mode, bool unique) {
 	if (mode == CREATE) {
-		cout << CREATE_ERROR << endl;
+		throw new InvalidCommandException(CREATE_ERROR);
 	}
 	else if (mode == SOLVE) {
-		cout << SOLVE_ERROR << endl;
+		throw new InvalidCommandException(SOLVE_ERROR);
 	}
 	else if (puzzle_mode == PUZZLE_DIFFICULTY) {
-		cout << PUZZLE_DIFFICULTY_ERROR << endl;
+		throw new InvalidCommandException(PUZZLE_DIFFICULTY_ERROR);
 	}
 	else if (puzzle_mode == PUZZLE_NUMBER || unique) {
-		cout << PUZZLE_NUMBER_ERROR << endl;
+		throw new InvalidCommandException(PUZZLE_NUMBER_ERROR);
 	}
 	else {
-		cout << UNKNOWN_COMMAND_ERROR << endl;
+		throw new InvalidCommandException(UNKNOWN_COMMAND_ERROR);
 	}
 }
 
@@ -122,8 +129,7 @@ int Core::input_file(char* filename, int output[][SIZE * SIZE]) {
 	FILE* fin = fopen(filename, "r");
 
 	if (fin == NULL) {
-		cout << "Cannot open the file! Please check the path." << endl;
-		return -1;
+		throw new CannotOpenFileException(FILE_ERROR);
 	}
 
 	char buffer[BUFFER_SIZE + 10];
@@ -133,24 +139,33 @@ int Core::input_file(char* filename, int output[][SIZE * SIZE]) {
 			char c = buffer[i];
 			if (c == '\0') {
 				break;
-			}
-			if (c >= '0' && c <= '9') {
+			}else if (c >= '0' && c <= '9') {
 				if (digit_counter == SIZE * SIZE) {
 					digit_counter = 0;
 					sudoku_counter++;
 				}
 				output[sudoku_counter][digit_counter++] = c - '0';
 			}
+			else if (c != '\n' && c != '\r' && c != ' ' && c != '\t') {
+				throw new BadFileException((string)"Unexpected character: '" + c + "'");
+			}
 		}
+	}
+	if (digit_counter != SIZE * SIZE) {
+		throw new BadFileException("Incomplete sudoku!");
 	}
 	fclose(fin);
 	return sudoku_counter + 1;
 }
 
 
-
 void Core::output_file(char* filename, int input[][SIZE * SIZE], int sudoku_number) {
 	FILE* fout = fopen(filename, "w");
+
+	if (fout == NULL) {
+		throw new CannotOpenFileException(FILE_ERROR);
+	}
+
 	char buffer[BUFFER_SIZE];
 
 	int buffer_index = 0;
@@ -166,6 +181,7 @@ void Core::output_file(char* filename, int input[][SIZE * SIZE], int sudoku_numb
 		}
 		buffer[buffer_index++] = '\n';
 		if (buffer_index >= BUFFER_SIZE - 300) {
+			buffer[buffer_index++] = '\0';
 			fputs(buffer, fout);
 			buffer_index = 0;
 		}
@@ -177,6 +193,7 @@ void Core::output_file(char* filename, int input[][SIZE * SIZE], int sudoku_numb
 
 int to_file_sudokus[CREATE_NUMBER_MAX][SIZE * SIZE] = { 0 };
 int from_file_sudokus[CREATE_NUMBER_MAX][SIZE * SIZE] = { 0 };
+int unsolvable_recorder[SOLVE_COUNT_MAX] = { 0 };
 
 int read_command(int argc, char* argv[]) {
 	int mode = UNKNOWN;
@@ -248,10 +265,10 @@ int read_command(int argc, char* argv[]) {
 		}
 	}
 
-	if (!areValidModes(mode, puzzle_mode, unique ||
+	if (!areValidModes(mode, puzzle_mode, unique) ||
 		status != TO_GET_SIGN ||
-		!isValidNumber(mode, number)
-	)) {
+		!isValidNumber(mode, puzzle_mode, number, lower, upper)
+	) {
 		exception_handle(mode, puzzle_mode, unique);
 		return 0;
 	}
@@ -260,6 +277,7 @@ int read_command(int argc, char* argv[]) {
 
 	int to_solve_puzzle_count = 0;
 	int solved_puzzle_count = 0;
+	
 
 	switch (mode) {
 	case CREATE:
@@ -269,26 +287,32 @@ int read_command(int argc, char* argv[]) {
 		break;
 	case SOLVE:
 		to_solve_puzzle_count = core.input_file(filename, from_file_sudokus);
-		if (to_solve_puzzle_count == -1) return 0;
 		cout << "SOLVE:" << filename << endl;
 		solved_puzzle_count = 
-			core.solve(from_file_sudokus, to_file_sudokus, to_solve_puzzle_count);
+			core.solve(from_file_sudokus, to_file_sudokus, 
+				to_solve_puzzle_count, unsolvable_recorder);
+		cout << "UNSOLVED PUZZLE INDEX:\n";
+		for (int i = 0; i < to_solve_puzzle_count - solved_puzzle_count; i++) {
+			cout << unsolvable_recorder[i] << ' ';
+		}
+		cout << endl;
 		core.output_file(OUTPUT_FILENAME, to_file_sudokus, solved_puzzle_count);
+		
 		/*cout << "Test" << endl;
 		solved_puzzle_count = input_file(filename, from_file_sudokus);
 		output_file(OUTPUT_FILENAME, from_file_sudokus, solved_puzzle_count);*/
 		break;
 	case PUZZLE:
-		if (puzzle_mode == PUZZLE_DIFFICULTY) {
-			cout << "PUZZLE_DIFFICULTY:" << number << " MODE:" << difficulty << endl;
+		if (puzzle_mode == PUZZLE_DIFFICULTY) {	
 			core.generate(number, difficulty, to_file_sudokus);
 			core.output_file(OUTPUT_FILENAME, to_file_sudokus, number);
+			cout << "PUZZLE_DIFFICULTY:" << number << " MODE:" << difficulty << endl;
 		}
 		else if (puzzle_mode == PUZZLE_NUMBER) {
-			cout << "PUZZLE_NUMBER:" << number << " LOWER:" << lower << 
-				" UPPER:" << upper << " " << (unique ? "UNIQUE" : "") << endl;
 			core.generate(number, lower, upper, unique, to_file_sudokus);
 			core.output_file(OUTPUT_FILENAME, to_file_sudokus, number);
+			cout << "PUZZLE_NUMBER:" << number << " LOWER:" << lower <<
+				" UPPER:" << upper << " " << (unique ? "UNIQUE" : "") << endl;
 		}
 		break;
 	default:
@@ -301,6 +325,10 @@ int read_command(int argc, char* argv[]) {
 
 
 int main(int argc, char* argv[]) {
-	read_command(argc, argv);
-		
+	try {
+		read_command(argc, argv);
+	}
+	catch (Exception* e) {
+		cout << e->get_info() << endl;
+	}
 }

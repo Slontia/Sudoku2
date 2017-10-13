@@ -70,6 +70,7 @@ bool Rank::record(int mode, double time, char* name) {
 	int index = board.list[mode].used_head;
 	int next_index = -1;
 	int free_index = -2;
+	//cout << "inserting " << name << endl;
 	if (fetch_free(mode, free_index) == false) {
 		return false;
 	}
@@ -80,17 +81,12 @@ bool Rank::record(int mode, double time, char* name) {
 
 	ptr_last_record = &board.list[mode].entry[free_index];
 	if (board.list[mode].used_head == NIL) {
-		if (fetch_free(mode, free_index)) {
-			board.list[mode].entry[free_index].next = board.list[mode].used_head;
-			board.list[mode].used_head = free_index;
-			board.list[mode].entry[free_index].time = time;
-			strcpy_s(board.list[mode].entry[free_index].name, name);
-			cout << "inserted: " << name << endl;
-			return true;
-		}
-		else {
-			return false;
-		}
+		board.list[mode].entry[free_index].next = board.list[mode].used_head;
+		board.list[mode].used_head = free_index;
+		board.list[mode].entry[free_index].time = time;
+		strcpy_s(board.list[mode].entry[free_index].name, name);
+		//cout << "inserted: " << name << endl;
+		return true;
 	}
 	else {
 		if (time < board.list[mode].entry[board.list[mode].used_head].time) {
@@ -98,12 +94,12 @@ bool Rank::record(int mode, double time, char* name) {
 			board.list[mode].used_head = free_index;
 			board.list[mode].entry[free_index].time = time;
 			strcpy_s(board.list[mode].entry[free_index].name, name);
-			cout << "inserted: " << name << endl;
+			//cout << "inserted: " << name << endl;
 			return true;
 		}
 		else {
 			while (true) {
-				cout << "while" << endl;
+				//cout << "while" << endl;
 				rank_entry* entry = &board.list[mode].entry[index];
 				next_index = entry->next;
 				rank_entry* next_entry = &board.list[mode].entry[next_index];
@@ -112,7 +108,7 @@ bool Rank::record(int mode, double time, char* name) {
 					strcpy_s(board.list[mode].entry[free_index].name,
 						sizeof(board.list[mode].entry[free_index].name), name);
 					insert_after(mode, index, free_index);
-					cout << "inserted: " << name << endl;
+					//cout << "inserted: " << name << endl;
 					return true;
 				}
 				index = next_index;
@@ -159,13 +155,28 @@ bool Rank::fetch_last_record(char * name, double & time)
 }
 
 bool Rank::fetch_free(int mode, int & index) {
+	//cout << "free_count : " << --free_count << endl;
 	if (board.list[mode].free_head == NIL) {
-		cout << "No free entry." << endl;
-		return false;
+		//cout << "No free entry." << endl;
+		// abandon the tail
+		int traverse_index = board.list[mode].used_head;
+		int next_index = traverse_index;
+		rank_entry* last_entry = NULL, *entry = NULL;
+		do {
+			//cout << "travese_index:" << traverse_index << endl;
+			traverse_index = next_index;
+			last_entry = entry;
+			entry = &board.list[mode].entry[traverse_index];
+			next_index = entry->next;
+			
+		} while (next_index != NIL);
+		last_entry->next = NIL;
+		index = traverse_index;
+		return true;
 	}
 	else {
 		index = board.list[mode].free_head;
-		cout << "free : " << index << endl;
+		//cout << "free_count : " << --free_count << endl;
 		board.list[mode].free_head = board.list[mode].entry[index].next;
 		return true;
 	}

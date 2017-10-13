@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-int main() {
+int main_unique_test() {
 	FILE* r;
 	int mat[SIZE*SIZE] = 
 	{   0,0,0,0,0,0,0,0,0,

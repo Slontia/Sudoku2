@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #define HOLE_I 0
 #define HOLE_J 0
-#define REPEAT 100
+#define REPEAT 10000
 
 int main_dig() {
 	int mat[SIZE*SIZE] = {
@@ -18,7 +18,7 @@ int main_dig() {
 	int out[SIZE*SIZE] = { 0 };
 
 	for (int rep = 0; rep < REPEAT; rep++) {
-		cout << dig(mat, out, 55);
+		dig(mat, out, 55);
 	}
 	//display_1d(out, SIZE*SIZE, 9);
 	getchar();

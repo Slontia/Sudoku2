@@ -71,7 +71,7 @@ bool Rank::record(int mode, double time, char* name) {
 	int next_index = -1;
 	int free_index = -2;
 	//cout << "inserting " << name << endl;
-	if (fetch_free(mode, free_index) == false) {
+	if (fetch_free(mode, free_index, time) == false) {
 		return false;
 	}
 	if (strlen(name) + 1 > NAMESIZE) {
@@ -154,7 +154,7 @@ bool Rank::fetch_last_record(char * name, double & time)
 
 }
 
-bool Rank::fetch_free(int mode, int & index) {
+bool Rank::fetch_free(int mode, int & index, double time) {
 	//cout << "free_count : " << --free_count << endl;
 	if (board.list[mode].free_head == NIL) {
 		//cout << "No free entry." << endl;
@@ -170,9 +170,15 @@ bool Rank::fetch_free(int mode, int & index) {
 			next_index = entry->next;
 			
 		} while (next_index != NIL);
-		last_entry->next = NIL;
-		index = traverse_index;
-		return true;
+		if (time < last_entry->time) {
+			last_entry->next = NIL;
+			index = traverse_index;
+			return true;
+		}
+		else {
+			return false;
+		}
+
 	}
 	else {
 		index = board.list[mode].free_head;

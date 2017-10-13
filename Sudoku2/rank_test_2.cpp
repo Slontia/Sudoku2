@@ -20,7 +20,7 @@ int main() {
 		strcpy_s(name, rand_name.c_str());
 		rank.record(MID, 0.5, name);
 	}
-
+	rank.record(MID, 0, "sucker");
 	rank.encrypt_flush(ENCRYPT);
 	rank.show(EASY);
 	rank.show(MID);

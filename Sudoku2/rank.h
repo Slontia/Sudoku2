@@ -56,7 +56,7 @@ public:
 	// 初始化数据库
 	void init_board();
 	// 初始化 board
-	bool fetch_free(int mode, int & index);
+	bool fetch_free(int mode, int & index, double time);
 	// 拿走一个空的 entry
 	bool insert_after(int mode, int tg_id, int new_id);
 	// 在空间中id为tg_entry的位置后面插入new_entry

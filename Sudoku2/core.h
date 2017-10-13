@@ -10,7 +10,7 @@ public:
 
 	/* -s */
 	bool solve(int puzzle[SIZE * SIZE], int solution[SIZE * SIZE]);
-	void solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int number);
+	int solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int number);
 
 	/* -n -r -u */
 	void generate(int number, int lower, int upper, bool unique, int result[][SIZE * SIZE]);

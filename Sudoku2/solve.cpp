@@ -47,11 +47,15 @@ bool Core::solve(int puzzle[SIZE * SIZE], int solution[SIZE * SIZE]) {
 	return true;
 }
 
-void Core::solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int number) {
+int Core::solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int number) {
+	int solutions_counter = 0;
 	Subject_sudoku* sudoku;
 	for (int i = 0; i < number; i++) {
 		sudoku = new Subject_sudoku(puzzle[i]);
-		fill_sudoku(sudoku, solution[i]);
+		if (fill_sudoku(sudoku, solution[solutions_counter])) {
+			solutions_counter++;
+		}
 		delete(sudoku);
 	}
+	return solutions_counter;
 }

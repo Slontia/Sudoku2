@@ -258,6 +258,7 @@ int read_command(int argc, char* argv[]) {
 
 	Core core;
 
+	int to_solve_puzzle_count = 0;
 	int solved_puzzle_count = 0;
 
 	switch (mode) {
@@ -267,10 +268,11 @@ int read_command(int argc, char* argv[]) {
 		core.output_file(OUTPUT_FILENAME, to_file_sudokus, number);
 		break;
 	case SOLVE:
-		solved_puzzle_count = core.input_file(filename, from_file_sudokus);
-		if (solved_puzzle_count == -1) return 0;
+		to_solve_puzzle_count = core.input_file(filename, from_file_sudokus);
+		if (to_solve_puzzle_count == -1) return 0;
 		cout << "SOLVE:" << filename << endl;
-		core.solve(from_file_sudokus, to_file_sudokus, solved_puzzle_count);
+		solved_puzzle_count = 
+			core.solve(from_file_sudokus, to_file_sudokus, to_solve_puzzle_count);
 		core.output_file(OUTPUT_FILENAME, to_file_sudokus, solved_puzzle_count);
 		/*cout << "Test" << endl;
 		solved_puzzle_count = input_file(filename, from_file_sudokus);
@@ -293,6 +295,7 @@ int read_command(int argc, char* argv[]) {
 
 		break;
 	}
+	return 0;
 }
 
 

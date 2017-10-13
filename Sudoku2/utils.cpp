@@ -61,7 +61,5 @@ bool read_file(FILE* f, int sudoku[SIZE*SIZE])
 			sudoku[9 * i + j] = d;
 		}
 	}
-	//matrix.display();
-	//cout << "readin = " << readin << endl;
 	return readin == 81;
 }

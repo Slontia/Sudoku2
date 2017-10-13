@@ -3,7 +3,6 @@
 int solution_count = 0;
 
 bool guess_value(Box* box, Subject_sudoku* sudoku, int solution[SIZE * SIZE], bool unique) {
-	//cout << "guess" << endl;
 	int rowno = box->row->number;
 	int columnno = box->column->number;
 	for (int i = 0; i < SIZE; i++) {
@@ -15,7 +14,6 @@ bool guess_value(Box* box, Subject_sudoku* sudoku, int solution[SIZE * SIZE], bo
 			if (fill_sudoku(sudoku, solution, unique)) {
 				return true;
 			}
-			//delete(new_sudoku);
 			box->cancel_certain(posvalue, members_posvalues);
 		}
 	}
@@ -25,7 +23,6 @@ bool guess_value(Box* box, Subject_sudoku* sudoku, int solution[SIZE * SIZE], bo
 bool fill_sudoku(Subject_sudoku* sudoku, int solution[SIZE * SIZE], bool unique){ // -- succeed(true) or failed(false)
 	Box* box;
 	box = sudoku->get_minpos_box();
-	//cout << sudoku->to_string() << endl;
 	if (box == NULL) {
 		sudoku->to_array(solution);
 		if (unique == false) {
@@ -58,37 +55,3 @@ void Core::solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int num
 		delete(sudoku);
 	}
 }
-
-/*int main3() {
-=======
-int unique_test(int puzzle[SIZE * SIZE], int solution[SIZE * SIZE]) {
-	solution_count = 0;
-	Subject_sudoku* sudoku;
-	sudoku = new Subject_sudoku(puzzle);
-	fill_sudoku(sudoku, solution, true);
-	delete(sudoku);
-	return solution_count;
-}
-
-
-int main3() {
->>>>>>> 19c85805b6c9c3bf9b29b9d7d17e734a31a13590
-	int mat_input[SIZE*SIZE] =
-	{
-		1, 2, 3, 0, 0, 0, 0, 0, 0,
-		4, 5, 6, 0, 0, 0, 0, 0, 0,
-		7, 8, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0
-	};
-	int solution[SIZE*SIZE] = { 0 };
-	bool result = solve_sudoku(mat_input, solution);
-	cout << result << endl;
-	cout << solution << endl;
-	getchar();
-	return 0;
-}*/

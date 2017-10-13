@@ -63,20 +63,6 @@ int get_unique_solution_puzzle(int puzzle[SIZE * SIZE],
 }
 
 
-/*int get_unique_solution_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
-	bool unique;
-	int all_freebox_num;
-	do {
-		all_freebox_num = get_puzzle(puzzle, lower, upper);
-		Subject_sudoku* sub_sudoku = new Subject_sudoku(puzzle);
-		int solution_counter = 0;
-		unique = generator_fill_sudoku(sub_sudoku, solution_counter);
-		delete sub_sudoku;
-	} while (!unique);
-	return all_freebox_num;
-}*/
-
-
 int get_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE], 
 	int lower, int upper) {
 	do {
@@ -121,20 +107,14 @@ bool create_final_sudoku(int sudoku[SIZE * SIZE]) {
 
 
 void clean_each_block_grids(int clean_count, int puzzle[SIZE * SIZE]) {
-	//int pos[SIZE];
-	//bool cleaned_recorder[SIZE];
 	int cleaned_recorder_int;
 	for (int i = 0; i < SIZE; i++) { // each block
-		/*for (int j = 0; j < SIZE; j++) {
-			cleaned_recorder[j] = false;
-		}*/
 		cleaned_recorder_int = 0;
 		for (int j = 0; j < clean_count; j++) { // each grid to clean
 			int free_position = rand() % (SIZE - j);
 			int free_digit_index = 0;
 			int digit_index;
 			for (digit_index = 0; digit_index < SIZE; digit_index++) { // find uncleaned grid
-				//if ((!cleaned_recorder[digit_index]) && // 
 				if ((!(cleaned_recorder_int & (1 << digit_index))) &&
 					(free_position == free_digit_index++)
 				) {
@@ -143,15 +123,7 @@ void clean_each_block_grids(int clean_count, int puzzle[SIZE * SIZE]) {
 			}
 			puzzle[GET_GRID_WITH_BLOCKNO(i, digit_index)] = 0;
 			cleaned_recorder_int |= (1 << digit_index);
-			//cleaned_recorder[digit_index] = true;
 		}
-
-		/*pos1 = rand() % 9;
-		while ((pos2 = rand() % 9) == pos1);
-		while ((pos3 = rand() % 9) == pos2 || (pos3 = rand() % 9) == pos1);
-		puzzle[((i / 3) * 3 + pos1 / 3) * 9 + ((i % 3) * 3 + pos1 % 3)] = 0;
-		puzzle[((i / 3) * 3 + pos2 / 3) * 9 + ((i % 3) * 3 + pos2 % 3)] = 0;
-		puzzle[((i / 3) * 3 + pos3 / 3) * 9 + ((i % 3) * 3 + pos3 % 3)] = 0;*/
 	}
 }
 
@@ -171,27 +143,3 @@ int create_puzzle(int puzzle[SIZE * SIZE], int min_freebox_num, int max_freebox_
 	}
 	return all_freebox_num;
 }
-
-
-/*int main() {
-int puzzle[SIZE * SIZE] = {
-0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0
-0
-};
-
-int targets[4] = { 36, 40, 5, 10 };
-int puzzle_template[SIZE * SIZE] = { 0 };
-
-cout << generator_solve_sudoku(puzzle, targets, puzzle_template) << endl;
-
-getchar();
-}*/
-

@@ -2,7 +2,8 @@
 #include "CppUnitTest.h"
 
 
-int results[SUDOKU_MAX][SIZE*SIZE];
+int result[SUDOKU_MAX][SIZE*SIZE];
+int puzzle[SUDOKU_MAX][SIZE*SIZE];
 FILE* fout;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -12,7 +13,6 @@ namespace Sudoku2Test
 	TEST_CLASS(UnitTest1)
 	{
 	public:
-
 		typedef struct node {
 			bool isbottom;
 			int depth;
@@ -48,51 +48,34 @@ namespace Sudoku2Test
 			}
 		}
 
-		void test_c(int number) {
+		void repeated_judge(int number, int result[][SIZE * SIZE]) {
 			int row_record[9] = { 0 }; // must be 511
 			int column_record[9] = { 0 };
 			int block_record[9] = { 0 };
 
-			char c;
 			int bit;
 
 			string* sudoku;
 			Treenode* root = create_treenode(-1, new string(""));
 			int counter = 0;
 
-			fout = fopen("C:\\Users\\65486\\Desktop\\output2.txt", "w");
-
-			//vector<vector<int>>* results = create_sudokus(number);
-			create_sudokus(number, results);
-
 			for (int i = 0; i < number; i++) {
 				sudoku = new string();
-				int* sudoku_ptr = results[i];
+				int* sudoku_ptr = result[i];
 				for (int j = 0; j < SIZE; j++) {
 					for (int k = 0; k < SIZE; k++) {
-						c = sudoku_ptr[GET_POS(j, k)] + '0';
-						(*sudoku) += c;
-						bit = (1 << (c - '1'));
+						int digit;
+						digit = sudoku_ptr[GET_POS(j, k)];
+						(*sudoku) += digit + '0';
+						bit = (1 << (digit - 1));
 						row_record[j] |= bit;
 						column_record[k] |= bit;
 						block_record[(j / 3) * 3 + k / 3] |= bit;
 					}
 				}
-				
-				/*for (char &c : *sudoku) {
-					fputc(c, fout);
-				}
-				fputc('\n', fout);*/
 
 				// judge & initial
 				for (int i = 0; i < 9; i++) {
-					if (
-						row_record[i] != 511 ||
-						column_record[i] != 511 ||
-						block_record[i] != 511
-						) {
-						fclose(fout);
-					}
 					Assert::AreEqual(511, row_record[i]);
 					Assert::AreEqual(511, column_record[i]);
 					Assert::AreEqual(511, block_record[i]);
@@ -100,22 +83,53 @@ namespace Sudoku2Test
 					column_record[i] = 0;
 					block_record[i] = 0;
 				}
+
+				char digit_map[SIZE];
+				for (int i = 0; i < SIZE; i++) {
+					digit_map[i] = (*sudoku)[i]; // build map
+				}
+				/* change to equivalence */
+				for (int i = 0; i < SIZE * SIZE; i++) {
+					(*sudoku)[i] = digit_map[(*sudoku)[i] - '1']; 
+				}
+
 				add_sudoku_to_tree(-1, &root, sudoku);
 				counter++;
 			}
 		}
 
-		TEST_METHOD(create)
-		{
-			// TODO: 在此输入测试代码
+		
+		void unique_solution_judge(int number, int puzzle[][SIZE * SIZE]) {
+			for (int i = 0; i < number; i++) {
+				Assert::IsTrue(generator_solve_sudoku(puzzle[i]));
+			}
+		}
+
+
+		void test_c(int number) {
+			Core core;
+			core.generate(number, result);
+			repeated_judge(number, result);
+		}
+
+		void test_n(int number, int lower, int upper, bool unique) {
+			Core core;
+			core.generate(number, lower, upper, unique, result);
+			//core.output_file("sudoku.txt", result, number);
+			unique_solution_judge(number, result);
+			core.solve(result, result, number);
+			repeated_judge(number, result);
+			//core.output_file("sudoku2.txt", result, number);
+		}
+
+
+		TEST_METHOD(create){
 			test_c(1000000);
 		}
 
-		/*TEST_METHOD(test_vec)
-		{
-			vector<int> v = test_vector();
-			//getchar();
-		}*/
+		TEST_METHOD(puzzle){
+			test_n(10000, 40, 48, true);
+		}
 
 	};
 }

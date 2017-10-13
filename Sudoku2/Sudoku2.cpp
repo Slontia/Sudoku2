@@ -116,10 +116,16 @@ void exception_handle(int mode, int puzzle_mode, bool unique) {
 }
 
 
-int input_file(char* filename, int output[][SIZE * SIZE]) {
+int Core::input_file(char* filename, int output[][SIZE * SIZE]) {
 	int sudoku_counter = 0;
 	int digit_counter = 0;
 	FILE* fin = fopen(filename, "r");
+
+	if (fin == NULL) {
+		cout << "Cannot open the file! Please check the path." << endl;
+		return -1;
+	}
+
 	char buffer[BUFFER_SIZE + 10];
 
 	while (fgets(buffer, BUFFER_SIZE, fin) != NULL) {
@@ -143,9 +149,10 @@ int input_file(char* filename, int output[][SIZE * SIZE]) {
 
 
 
-void output_file(char* filename, int input[][SIZE * SIZE], int sudoku_number) {
-	char buffer[BUFFER_SIZE];
+void Core::output_file(char* filename, int input[][SIZE * SIZE], int sudoku_number) {
 	FILE* fout = fopen(filename, "w");
+	char buffer[BUFFER_SIZE];
+
 	int buffer_index = 0;
 	for (int sudoku_index = 0; sudoku_index < sudoku_number; sudoku_index++) {
 		for (int digit_index = 0; digit_index < SIZE * SIZE; digit_index++) {
@@ -168,116 +175,10 @@ void output_file(char* filename, int input[][SIZE * SIZE], int sudoku_number) {
 }
 
 
-int read_command(int argc, char* argv[]) {
-	int mode = UNKNOWN;
-	int puzzle_mode = UNKNOWN;
-	bool unique = false;
-
-	regex reg_lower_upper(LOWER_UPPER_REGEX);
-	regex reg_difficulty(DIFFICULTY_REGEX);
-	regex reg_number(NUMBER_REGEX);
-
-	char* filename = NULL;
-	int number = 0;
-	int lower = 0;
-	int upper = 0;
-	int difficulty = 0;
-
-	int status = TO_GET_SIGN;
-
-	for (int i = 1; i < argc; i++) {
-		if (status == TO_GET_SIGN && strcmp(argv[i], CREATE_SIGN) == 0 && set_mode(&mode, CREATE)) {
-			status = TO_GET_NUMBER;
-			continue;
-		}
-		else if (status == TO_GET_SIGN && strcmp(argv[i], SOLVE_SIGN) == 0 && set_mode(&mode, SOLVE)) {
-			status = TO_GET_FILENAME;
-			continue;
-		}
-		else if (status == TO_GET_SIGN && strcmp(argv[i], PUZZLE_SIGN) == 0 && set_mode(&mode, PUZZLE)) {
-			status = TO_GET_NUMBER;
-			continue;
-		}
-		else if (status == TO_GET_SIGN && strcmp(argv[i], PUZZLE_DIFFICULTY_SIGN) == 0 && set_puzzle_mode(&puzzle_mode, PUZZLE_DIFFICULTY)) {
-			status = TO_GET_DIFFICULTY;
-			continue;
-		}
-		else if (status == TO_GET_SIGN && strcmp(argv[i], PUZZLE_NUMBER_SIGN) == 0 && set_puzzle_mode(&puzzle_mode, PUZZLE_NUMBER)) {
-			status = TO_GET_LOWER_UPPER;
-			continue;
-		}
-		else if (status == TO_GET_SIGN && strcmp(argv[i], PUZZLE_NUMBER_UNIQUE_SIGN) == 0) {
-			if (unique) {
-				exception_handle(mode, puzzle_mode, unique);
-				return 0;
-			}
-			unique = true;
-			status = TO_GET_SIGN;
-			continue;
-		}
-		else if (status == TO_GET_NUMBER && regex_match(*(new string(argv[i])), (*new smatch), reg_number)) {
-			sscanf(argv[i], "%d", &number);
-			status = TO_GET_SIGN;
-			continue;
-		}
-		else if (status == TO_GET_DIFFICULTY && regex_match(*(new string(argv[i])), (*new smatch), reg_difficulty)) {
-			sscanf(argv[i], "%d", &difficulty);
-			status = TO_GET_SIGN;
-			continue;
-		}
-		else if (status == TO_GET_LOWER_UPPER && regex_match(*(new string(argv[i])), (*new smatch), reg_lower_upper)) {
-			sscanf(argv[i], "%d~%d", &lower, &upper);
-			status = TO_GET_SIGN;
-			continue;
-		}
-		else if (status == TO_GET_FILENAME) {
-			filename = argv[i];
-			status = TO_GET_SIGN;
-			continue;
-		}
-		else {
-			exception_handle(mode, puzzle_mode, unique);
-			return 0;
-		}
-	}
-
-	if (!areValidModes(mode, puzzle_mode, unique ||
-		status != TO_GET_SIGN ||
-		!isValidNumber(mode, number)
-	)) {
-		exception_handle(mode, puzzle_mode, unique);
-		return 0;
-	}
-
-	Core core;
-
-	switch (mode) {
-	case CREATE:
-		cout << "CREATE:" << number << endl;
-		int result[CREATE_NUMBER_MAX][SIZE * SIZE];
-		core.generate(number, result);
-		output_file(OUTPUT_FILENAME, result, number);
-		break;
-	case SOLVE:
-		cout << "SOLVE:" << filename << endl;
-		break;
-	case PUZZLE:
-		if (puzzle_mode == PUZZLE_DIFFICULTY) {
-			cout << "PUZZLE_DIFFICULTY:" << number << " MODE:" << difficulty << endl;
-		}
-		else if (puzzle_mode == PUZZLE_NUMBER) {
-			cout << "PUZZLE_NUMBER:" << number << " FROM:" << lower << " TO:" << upper << " " << unique << endl;
-		}
-		break;
-	default:
-		break;
-	}
-}
-
 int to_file_sudokus[CREATE_NUMBER_MAX][SIZE * SIZE] = { 0 };
 int from_file_sudokus[CREATE_NUMBER_MAX][SIZE * SIZE] = { 0 };
 
-int main(int argc, char* argv[]) {
+int read_command(int argc, char* argv[]) {
 	int mode = UNKNOWN;
 	int puzzle_mode = UNKNOWN;
 	bool unique = false;
@@ -363,13 +264,14 @@ int main(int argc, char* argv[]) {
 	case CREATE:
 		cout << "CREATE:" << number << endl;
 		core.generate(number, to_file_sudokus);
-		output_file(OUTPUT_FILENAME, to_file_sudokus, number);
+		core.output_file(OUTPUT_FILENAME, to_file_sudokus, number);
 		break;
 	case SOLVE:
+		solved_puzzle_count = core.input_file(filename, from_file_sudokus);
+		if (solved_puzzle_count == -1) return 0;
 		cout << "SOLVE:" << filename << endl;
-		solved_puzzle_count = input_file(filename, from_file_sudokus);
 		core.solve(from_file_sudokus, to_file_sudokus, solved_puzzle_count);
-		output_file(OUTPUT_FILENAME, to_file_sudokus, solved_puzzle_count);
+		core.output_file(OUTPUT_FILENAME, to_file_sudokus, solved_puzzle_count);
 		/*cout << "Test" << endl;
 		solved_puzzle_count = input_file(filename, from_file_sudokus);
 		output_file(OUTPUT_FILENAME, from_file_sudokus, solved_puzzle_count);*/
@@ -378,65 +280,24 @@ int main(int argc, char* argv[]) {
 		if (puzzle_mode == PUZZLE_DIFFICULTY) {
 			cout << "PUZZLE_DIFFICULTY:" << number << " MODE:" << difficulty << endl;
 			core.generate(number, difficulty, to_file_sudokus);
-			output_file(OUTPUT_FILENAME, to_file_sudokus, number);
+			core.output_file(OUTPUT_FILENAME, to_file_sudokus, number);
 		}
 		else if (puzzle_mode == PUZZLE_NUMBER) {
-			cout << "PUZZLE_NUMBER:" << number << " FROM:" << lower << " TO:" << upper << " " << unique << endl;
+			cout << "PUZZLE_NUMBER:" << number << " LOWER:" << lower << 
+				" UPPER:" << upper << " " << (unique ? "UNIQUE" : "") << endl;
 			core.generate(number, lower, upper, unique, to_file_sudokus);
-			output_file(OUTPUT_FILENAME, to_file_sudokus, number);
+			core.output_file(OUTPUT_FILENAME, to_file_sudokus, number);
 		}
 		break;
 	default:
-		
+
 		break;
 	}
-		
 }
 
 
 
-/*int main() {
-	int sudoku[81] = { 0 };
-	int puzzle[81] = { 0 };
-	FILE* fsudoku;
-	FILE* fpuzzle;
-	fopen_s(&fsudoku, "solution_55.txt", "w");
-	fopen_s(&fpuzzle, "puzzle_55.txt", "w");
-
-	srand((int)time(0));
-
-	
-
-	int result[NUM][SIZE * SIZE];
-	Core core;
-	core.generate(NUM, 1, result);
-	//core.generate(NUM, 55, 55, true, result);
-	core.solve(result[0], sudoku);
-
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-			cout << sudoku[i * 9 + j];
-		}
-		cout << endl;
-	}
-
-	
-
-}*/
-
-
-/*int main() {
-	int result[1000][81];
-	srand((int)time(0));
-
-	double dur;
-	clock_t start, end;
-	start = clock();
-
-	Core::generate(1000, 45, 45, true, result);
-
-	end = clock();
-	dur = (double)(end - start);
-	printf("Use Time:%f\n", (dur / CLOCKS_PER_SEC));
-}*/
-
+int main(int argc, char* argv[]) {
+	read_command(argc, argv);
+		
+}

@@ -10,7 +10,7 @@ int block_record[9] = { 0 };
 
 namespace Sudoku2Test
 {
-	TEST_CLASS(UnitTest2)
+	/*TEST_CLASS(UnitTest2)
 	{
 	public:
 
@@ -81,13 +81,13 @@ namespace Sudoku2Test
 				0, 0, 0, 1, 2, 3, 4, 5, 6
 			};
 			test_s(mat_input, false);
-		}
+		}*/
 
 		/*TEST_METHOD(test_vec)
 		{
 			vector<int> v = test_vector();
 			//getchar();
 		}*/
-
-	};
+	
+	//};
 }

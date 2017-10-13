@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 Subject_sudoku::Subject_sudoku(string sudoku_str) {
-	//cout << sudoku_str << endl;
 	for (int i = 0; i < SIZE; i++) {
 		rows[i] = new Group(i);
 		columns[i] = new Group(i);
@@ -23,7 +22,6 @@ Subject_sudoku::Subject_sudoku(string sudoku_str) {
 }
 
 Subject_sudoku::Subject_sudoku(int sudoku[SIZE * SIZE]) {
-	//cout << sudoku_str << endl;
 	zeroes = 0;
 	for (int i = 0; i < SIZE; i++) {
 		rows[i] = new Group(i);
@@ -48,7 +46,6 @@ Subject_sudoku::Subject_sudoku(int sudoku[SIZE * SIZE]) {
 
 /* [copy construction] */
 Subject_sudoku::Subject_sudoku(const Subject_sudoku& sudoku) {
-	//cout << "create" << endl;
 	for (int i = 0; i < SIZE; i++) {
 		rows[i] = new Group(i, sudoku.rows[i]->hasvalues);
 		columns[i] = new Group(i, sudoku.columns[i]->hasvalues);
@@ -94,7 +91,6 @@ Box* Subject_sudoku::get_minpos_box() const {
 			box = getbox(i, j);
 			if (!box->iscertain()) {
 				pos = count_one(box->posvalue);
-				//cout << pos << endl;
 				if (pos < minpos) {
 					minpos = pos;
 					minbox = box;

@@ -17,6 +17,10 @@ public:
 
 	/* -n -m */
 	void generate(int number, int mode, int result[][SIZE * SIZE]);
+
+	/* file */
+	int input_file(char* filename, int output[][SIZE * SIZE]);
+	void output_file(char* filename, int input[][SIZE * SIZE], int sudoku_number);
 };
 
 

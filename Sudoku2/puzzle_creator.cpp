@@ -73,15 +73,19 @@ int get_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 
 
 int get_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
-	do {
-		for (int i = 0; i < SIZE*SIZE; i++) { // initialize
-			puzzle[i] = 0;
-		}
-		set_number_randomly(puzzle); // set numbers
-	} while (!create_final_sudoku(puzzle)); // create final sudoku
-	return create_puzzle(puzzle, lower, upper); // clean grids
+	int rand_row[SIZE];
+	int rand_col[SIZE];
+	for (int i = 0; i < SIZE*SIZE; i++) {
+		puzzle[i] = 0;
+	}
+	rand_of_n(rand_row, SIZE);
+	rand_of_n(rand_col, SIZE);
+	for (int i = 0; i < SIZE; i++) {
+		puzzle[9*rand_row[i]+ rand_col[i]] = i+1;
+	}
+	create_final_sudoku(puzzle); // create final sudoku
+	return create_puzzle(puzzle, puzzle, lower, upper); // clean grids
 }
-
 
 void set_number_randomly(int sudoku[SIZE * SIZE]) {
 	int position;
@@ -104,12 +108,15 @@ int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 	if (lower > upper || lower < 0 || upper > SIZE * SIZE) {
 		return 0;
 	}
-	int all_freebox_num = (rand() % (upper - lower + 1)) + upper;
-	int freebox_num = all_freebox_num - dig(sudoku, puzzle, all_freebox_num);
-
+	int all_freebox_num = (rand() % (upper - lower + 1)) + lower;
+	int cleaned_num = dig(sudoku, puzzle, all_freebox_num);
+	//cout << cleaned_num << endl;
+	int freebox_num = all_freebox_num - cleaned_num;
 	if (freebox_num == 0) {
 		return all_freebox_num;
 	}
+
+	bool cleaned_recorder[SIZE * SIZE] = { 0 };
 
 	int cleaned_recorder_int[SIZE] = { 0 }; // for blocks
 	int cleaned_counter[SIZE] = { 0 }; // for blocks
@@ -126,7 +133,7 @@ int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 	for (int i = 0; i < freebox_num; i++) {
 		int min_cleaned_blockno = -1;
 		int min_cleaned_count = SIZE + 1;
-		for (int j = 0; i < SIZE; j++) {
+		for (int j = 0; j < SIZE; j++) {
 			int count = cleaned_counter[j];
 			if (count <= min_cleaned_count) {
 				min_cleaned_blockno = j;
@@ -143,11 +150,11 @@ int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 				break;
 			}
 		}
-		puzzle[GET_GRID_WITH_BLOCKNO(i, digit_index)] = 0;
+		puzzle[GET_GRID_WITH_BLOCKNO(min_cleaned_blockno, digit_index)] = 0;
 		cleaned_recorder_int[min_cleaned_blockno] |= (1 << digit_index);
 		cleaned_counter[min_cleaned_blockno]++;
 	}
-
+	return all_freebox_num;
 }
 
 

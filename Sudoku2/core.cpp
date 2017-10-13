@@ -8,7 +8,8 @@ Core::Core() {
 int Core::input_file(char* filename, int output[][SIZE * SIZE]) {
 	int sudoku_counter = 0;
 	int digit_counter = 0;
-	FILE* fin = fopen(filename, "r");
+	FILE* fin = NULL;
+	fopen_s(&fin, filename, "r");
 
 	if (fin == NULL) {
 		throw new CannotOpenFileException(FILE_ERROR);
@@ -43,7 +44,8 @@ int Core::input_file(char* filename, int output[][SIZE * SIZE]) {
 
 
 void Core::output_file(char* filename, int input[][SIZE * SIZE], int sudoku_number) {
-	FILE* fout = fopen(filename, "w");
+	FILE* fout = NULL;
+	fopen_s(&fout, filename, "w");
 
 	if (fout == NULL) {
 		throw new CannotOpenFileException(FILE_ERROR);

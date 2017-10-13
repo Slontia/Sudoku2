@@ -64,10 +64,11 @@ int get_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 		}
 		set_number_randomly(sudoku); // set numbers
 	} while (!create_final_sudoku(sudoku)); // create final sudoku
-	for (int i = 0; i < SIZE* SIZE; i++) { // copy to puzzle
+	/*for (int i = 0; i < SIZE* SIZE; i++) { // copy to puzzle
 		puzzle[i] = sudoku[i];
 	}
-	return create_puzzle(puzzle, lower, upper); // clean grids
+	return create_puzzle(puzzle, lower, upper); // clean grids*/
+	return create_puzzle(sudoku, puzzle, lower, upper);
 }
 
 
@@ -98,6 +99,58 @@ bool create_final_sudoku(int sudoku[SIZE * SIZE]) {
 	return result;
 }
 
+int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
+	int lower, int upper) {
+	if (lower > upper || lower < 0 || upper > SIZE * SIZE) {
+		return 0;
+	}
+	int all_freebox_num = (rand() % (upper - lower + 1)) + upper;
+	int freebox_num = all_freebox_num - dig(sudoku, puzzle, all_freebox_num);
+
+	if (freebox_num == 0) {
+		return all_freebox_num;
+	}
+
+	int cleaned_recorder_int[SIZE] = { 0 }; // for blocks
+	int cleaned_counter[SIZE] = { 0 }; // for blocks
+	for (int blockno = 0; blockno < SIZE; blockno++) { // each block
+		for (int pos = 0; pos < SIZE; pos++) { // each grid in the block
+			int digit = puzzle[GET_GRID_WITH_BLOCKNO(blockno, pos)];
+			if (digit == 0) {
+				cleaned_recorder_int[blockno] |= (1 << pos);
+				cleaned_counter[blockno]++;
+			}
+		}
+	}
+
+	for (int i = 0; i < freebox_num; i++) {
+		int min_cleaned_blockno = -1;
+		int min_cleaned_count = SIZE + 1;
+		for (int j = 0; i < SIZE; j++) {
+			int count = cleaned_counter[j];
+			if (count <= min_cleaned_count) {
+				min_cleaned_blockno = j;
+				min_cleaned_count = count;
+			}
+		}
+		int free_position = rand() % (SIZE - min_cleaned_count);
+		int free_digit_index = 0;
+		int digit_index;
+		for (digit_index = 0; digit_index < SIZE; digit_index++) { // find uncleaned grid
+			if ((!(cleaned_recorder_int[min_cleaned_blockno] & (1 << digit_index))) && // uncleaned?
+				(free_position == free_digit_index++) // the right position?
+				) {
+				break;
+			}
+		}
+		puzzle[GET_GRID_WITH_BLOCKNO(i, digit_index)] = 0;
+		cleaned_recorder_int[min_cleaned_blockno] |= (1 << digit_index);
+		cleaned_counter[min_cleaned_blockno]++;
+	}
+
+}
+
+
 
 void clean_each_block_grids(int clean_count, int puzzle[SIZE * SIZE]) {
 	int cleaned_recorder_int;
@@ -119,6 +172,10 @@ void clean_each_block_grids(int clean_count, int puzzle[SIZE * SIZE]) {
 		}
 	}
 }
+
+
+
+
 
 int create_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
 	if (lower > upper || lower < 0 || upper > SIZE * SIZE) {

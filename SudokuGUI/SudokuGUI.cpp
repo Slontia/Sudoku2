@@ -18,7 +18,7 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 	create_grids();
 	create_input_buttons();
 	create_func_buttons();
-	//disable_buttons();
+	disable_buttons();
 	/* best time */
 	/* timer */
 	QLCDNumber* time_lcd = new QLCDNumber(this);
@@ -209,8 +209,8 @@ void SudokuGUI::new_game(int difficulty) {
 	int puzzle_receiver[1][SIZE*SIZE];
 	int solution[SIZE * SIZE] = {0};
 
-	core.generate(1, 55, 55, true, puzzle_receiver);
-	//core.generate(1, difficulty, puzzle_receiver);
+	//core.generate(1, 55, 55, true, puzzle_receiver);
+	core.generate(1, difficulty, puzzle_receiver);
 
 	
 	fout = fopen("C:/Users/65486/Desktop/debug.txt", "w");
@@ -237,13 +237,8 @@ void SudokuGUI::new_game(int difficulty) {
 
 	fclose(fout);
 
-
-	
 	int index = 0;
 	int digit;
-
-
-
 
 	QPushButton* btn;
 	for (int i = 0; i < SIZE; i++) {

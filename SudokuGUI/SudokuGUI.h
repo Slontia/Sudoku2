@@ -33,6 +33,7 @@
 	background-color:#FF69B4;\
 }"
 #define FUNCTION_BUTTON_STYLE "QPushButton{\
+	color:#000000;\
 	background-color:#FFFF66;\
 }"
 #define ENABLE_BUTTON_STYLE "QPushButton{\

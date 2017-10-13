@@ -81,12 +81,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sudoku2.dll">
+    <None Include="..\x64\Release\Sudoku2.dll">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="sudoku2.lib">
+    <Library Include="..\x64\Release\Sudoku2.lib">
       <Filter>Source Files</Filter>
     </Library>
   </ItemGroup>

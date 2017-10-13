@@ -195,7 +195,3 @@ cout << generator_solve_sudoku(puzzle, targets, puzzle_template) << endl;
 getchar();
 }*/
 
-
-
-
-

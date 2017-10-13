@@ -149,27 +149,37 @@
     <ClInclude Include="box.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="create.h" />
+    <ClInclude Include="dig.h" />
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="exchanger.h" />
+    <ClInclude Include="fgmap.h" />
     <ClInclude Include="group.h" />
     <ClInclude Include="mode_generatror.h" />
     <ClInclude Include="puzzle_creator.h" />
+    <ClInclude Include="rank.h" />
     <ClInclude Include="solve.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="subject_sudoku.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="template_sudoku.h" />
     <ClInclude Include="templet.h" />
+    <ClInclude Include="unitmaps.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="box.cpp" />
+    <ClCompile Include="constraint_test.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="create.cpp" />
+    <ClCompile Include="dig.cpp" />
     <ClCompile Include="exchanger.cpp" />
+    <ClCompile Include="fgmap.cpp" />
+    <ClCompile Include="fgmap_test.cpp" />
     <ClCompile Include="group.cpp" />
     <ClCompile Include="mode_generator.cpp" />
     <ClCompile Include="puzzle_creator.cpp" />
+    <ClCompile Include="rank.cpp" />
+    <ClCompile Include="rank_test.cpp" />
     <ClCompile Include="solve.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -181,6 +191,8 @@
     <ClCompile Include="Sudoku2.cpp" />
     <ClCompile Include="template_sudoku.cpp" />
     <ClCompile Include="templet.cpp" />
+    <ClCompile Include="unique_test.cpp" />
+    <ClCompile Include="unitmaps.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

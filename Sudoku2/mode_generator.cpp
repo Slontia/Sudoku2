@@ -42,3 +42,27 @@ bool generator_solve_sudoku(int puzzle[SIZE * SIZE])
 	delete(sudoku);
 	return result;
 }
+
+/*int main() {
+	int puzzle[SIZE * SIZE] = {
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0
+		0
+	};
+
+	int targets[4] = { 36, 40, 5, 10 };
+	int puzzle_template[SIZE * SIZE] = { 0 };
+
+	cout << generator_solve_sudoku(puzzle, targets, puzzle_template) << endl;
+	
+	getchar();
+}*/
+
+

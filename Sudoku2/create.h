@@ -16,3 +16,4 @@ void fill_line_to_sudoku(int* grid, int line[BLOCK_SIZE]);
 void initial_sudoku(int sudoku[SIZE][SIZE]);
 void initial_exchanger(Exchanger* exchangers[EXCHANGER_COUNT], int sudoku[SIZE][SIZE]);
 void output_sudoku(int sudoku[SIZE][SIZE], int result[SIZE*SIZE]);
+

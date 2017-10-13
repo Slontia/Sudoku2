@@ -63,6 +63,18 @@
     <ClInclude Include="exceptions.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="dig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fgmap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rank.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="unitmaps.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -105,6 +117,30 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="core.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="constraint_test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rank.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rank_test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="unique_test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="unitmaps.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dig.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fgmap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="fgmap_test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

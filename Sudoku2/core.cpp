@@ -2,7 +2,9 @@
 #include <time.h>
 
 Core::Core() {
-	srand(time(0));
+	//srand(time(0));
+	srand((int)time(0));
+	srand(0);
 }
 
 int Core::input_file(char* filename, int output[][SIZE * SIZE]) {

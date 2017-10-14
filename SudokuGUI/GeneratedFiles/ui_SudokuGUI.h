@@ -31,10 +31,14 @@ public:
     QAction *action_easy;
     QAction *action_normal;
     QAction *action_hard;
+    QAction *action_leading_board;
+    QAction *action_help;
+    QAction *action_about;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menu_game;
     QMenu *menu_newGame;
+    QMenu *menu_about;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *SudokuGUIClass)
@@ -54,6 +58,12 @@ public:
         action_normal->setObjectName(QStringLiteral("action_normal"));
         action_hard = new QAction(SudokuGUIClass);
         action_hard->setObjectName(QStringLiteral("action_hard"));
+        action_leading_board = new QAction(SudokuGUIClass);
+        action_leading_board->setObjectName(QStringLiteral("action_leading_board"));
+        action_help = new QAction(SudokuGUIClass);
+        action_help->setObjectName(QStringLiteral("action_help"));
+        action_about = new QAction(SudokuGUIClass);
+        action_about->setObjectName(QStringLiteral("action_about"));
         centralWidget = new QWidget(SudokuGUIClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         SudokuGUIClass->setCentralWidget(centralWidget);
@@ -64,16 +74,22 @@ public:
         menu_game->setObjectName(QStringLiteral("menu_game"));
         menu_newGame = new QMenu(menu_game);
         menu_newGame->setObjectName(QStringLiteral("menu_newGame"));
+        menu_about = new QMenu(menuBar);
+        menu_about->setObjectName(QStringLiteral("menu_about"));
         SudokuGUIClass->setMenuBar(menuBar);
         statusBar = new QStatusBar(SudokuGUIClass);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         SudokuGUIClass->setStatusBar(statusBar);
 
         menuBar->addAction(menu_game->menuAction());
+        menuBar->addAction(menu_about->menuAction());
         menu_game->addAction(menu_newGame->menuAction());
+        menu_game->addAction(action_leading_board);
         menu_newGame->addAction(action_easy);
         menu_newGame->addAction(action_normal);
         menu_newGame->addAction(action_hard);
+        menu_about->addAction(action_help);
+        menu_about->addAction(action_about);
 
         retranslateUi(SudokuGUIClass);
 
@@ -92,8 +108,12 @@ public:
         action_normal->setShortcut(QApplication::translate("SudokuGUIClass", "Ctrl+1", Q_NULLPTR));
         action_hard->setText(QApplication::translate("SudokuGUIClass", "Hard", Q_NULLPTR));
         action_hard->setShortcut(QApplication::translate("SudokuGUIClass", "Ctrl+2", Q_NULLPTR));
+        action_leading_board->setText(QApplication::translate("SudokuGUIClass", "Leading Board", Q_NULLPTR));
+        action_help->setText(QApplication::translate("SudokuGUIClass", "Help", Q_NULLPTR));
+        action_about->setText(QApplication::translate("SudokuGUIClass", "About Sudoku", Q_NULLPTR));
         menu_game->setTitle(QApplication::translate("SudokuGUIClass", "Game", Q_NULLPTR));
         menu_newGame->setTitle(QApplication::translate("SudokuGUIClass", "New Game", Q_NULLPTR));
+        menu_about->setTitle(QApplication::translate("SudokuGUIClass", "About", Q_NULLPTR));
     } // retranslateUi
 
 };

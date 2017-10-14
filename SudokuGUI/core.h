@@ -1,4 +1,5 @@
 #pragma once
+#define SIZE 9
 
 class __declspec(dllexport) Core {
 	

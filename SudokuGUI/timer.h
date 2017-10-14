@@ -24,9 +24,11 @@ private:
 	QTime* time = NULL;
 	QLCDNumber* time_lcd = NULL;
 
-
-
 	public slots:
 	void timeout_handle();
 
+public:
+	QTime* get_time() {
+		return time;
+	}
 };

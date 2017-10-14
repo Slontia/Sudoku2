@@ -5,13 +5,17 @@
 //#include "../Sudoku2/solve.cpp"
 //#include "../Sudoku2/subject_sudoku.cpp"
 #include <qdebug>
-#include "core.h"
+#include "rank.h"
+#include "boardGUI.h"
 
 SudokuGUI::SudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
 {
+	core = new Core();
+	this->rank = new Rank();
+
 	ui.setupUi(this);
-	resize(760, 570);
+	setFixedSize(760, 570);
 	/* menu */
 	binding_actions();
 	/* sudoku */
@@ -25,12 +29,17 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 	time_lcd->setDigitCount(12);
 	time_lcd->setMode(QLCDNumber::Dec);
 	time_lcd->setSegmentStyle(QLCDNumber::Flat);
-	time_lcd->setGeometry(550, 100, 200, 50);
+	time_lcd->setGeometry(550, 115, 200, 50);
 	//time_lcd->setPalette(Qt::red);
 	//QPalette palette = time_lcd->palette();
 	//palette.setColor(QPalette::Normal, QPalette::WindowText, Qt::red);
 	//time_lcd->setPalette(palette);
 	timer = new Timer(this, time_lcd);
+
+	grid_count = new QLineEdit(this);
+	grid_count->setEnabled(false);
+	grid_count->setGeometry(550, 60, 200, 50);
+	grid_count->setFont(FUNCTION_FONT);
 }
 
 /*===========================\
@@ -135,11 +144,14 @@ void SudokuGUI::binding_actions() {
 	mapper->setMapping(ui.action_normal, NORMAL);
 	mapper->setMapping(ui.action_hard, HARD);
 	QObject::connect(mapper, SIGNAL(mapped(int)), this, SLOT(new_puzzle(int)));
+	QObject::connect(ui.action_leading_board, SIGNAL(triggered()), this, SLOT(show_board()));
 }
 
 /*===========================\
 |           FUNCS            |
 \===========================*/
+
+
 void SudokuGUI::cancel_checking() {
 	if (checking) {
 		checking = false;
@@ -183,14 +195,23 @@ void SudokuGUI::track_number(int x) {
 
 
 void SudokuGUI::set_number(int x) {
+	char unfilled_grid_count_str[3];
 	if (curbtn != NULL) {
 		int* intptr;
 		intptr = &(numbers[this->cur_rowno][this->cur_colno]);
 		if (x == CLEAN) {
+			if (*intptr != CLEAN) {
+				sprintf(unfilled_grid_count_str, "%d", ++unfilled_grid_count);
+				grid_count->setText(unfilled_grid_count_str);
+			}
 			curbtn->setText("");
 			*intptr = 0;
 		}
 		else {
+			if (*intptr == CLEAN) {
+				sprintf(unfilled_grid_count_str, "%d", --unfilled_grid_count);
+				grid_count->setText(unfilled_grid_count_str);
+			}
 			char num[2];
 			num[0] = x + '0';
 			num[1] = '\0';
@@ -203,33 +224,47 @@ void SudokuGUI::set_number(int x) {
 
 void SudokuGUI::new_game(int difficulty) {
 	FILE* fout;
-	Core core;
 
-	this->remaining_grid_number = 0;
+	this->mode = difficulty - 1;
+
+	qDebug() << "1111111111" << endl;
+
+	this->unfilled_grid_count = 0;
 	int puzzle_receiver[1][SIZE*SIZE];
-	int solution[SIZE * SIZE] = {0};
 
 	//core.generate(1, 55, 55, true, puzzle_receiver);
-	core.generate(1, difficulty, puzzle_receiver);
-
+	core->generate(1, difficulty, puzzle_receiver);
+	qDebug() << "2222222" << endl;
 	
+
 	fout = fopen("C:/Users/65486/Desktop/debug.txt", "w");
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
-			this->puzzle[GET_GRIDNO(i, j)] = puzzle_receiver[0][GET_GRIDNO(i, j)];
-			fputc(puzzle[GET_GRIDNO(i, j)] + '0', fout);
+			int gridno = GET_GRIDNO(i, j);
+			this->puzzle[gridno] = puzzle_receiver[0][gridno];
+			if (puzzle[gridno] == 0) {
+				unfilled_grid_count++;
+			}
+			fputc(puzzle[gridno] + '0', fout);
+			
 		}
 		fputc('\n', fout);
 	}
 	fputc('\n', fout);
 
-	core.solve(puzzle_receiver[0], solution);
+	char unfilled_grid_count_str[3];
+	sprintf(unfilled_grid_count_str, "%d", unfilled_grid_count);
+	grid_count->setText(unfilled_grid_count_str);
+
+	qDebug() << "333333333333" << endl;
+
+	core->solve(puzzle_receiver[0], this->sudoku);
 
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			//this->puzzle[GET_GRIDNO(i, j)] = puzzle_receiver[0][GET_GRIDNO(i, j)];
 			//fputc(sudoku[GET_GRIDNO(i, j)] + '0', fout);
-			fprintf(fout, "%d", solution[GET_GRIDNO(i, j)]);
+			fprintf(fout, "%d", sudoku[GET_GRIDNO(i, j)]);
 		}
 		fputc('\n', fout);
 	}
@@ -239,6 +274,8 @@ void SudokuGUI::new_game(int difficulty) {
 
 	int index = 0;
 	int digit;
+
+	qDebug() << "444444444444" << endl;
 
 	QPushButton* btn;
 	for (int i = 0; i < SIZE; i++) {
@@ -261,9 +298,15 @@ void SudokuGUI::new_game(int difficulty) {
 		}
 	}
 
+	qDebug() << "5555555555" << endl;
+
 	enable_buttons();
 
+	qDebug() << "6666666666" << endl;
+
 	timer->start();
+
+	qDebug() << "777777777" << endl;
 
 	curbtn = NULL;
 }
@@ -295,6 +338,15 @@ void SudokuGUI::enable_buttons() {
 		btn->setEnabled(true);
 		btn->setStyleSheet(FUNCTION_BUTTON_STYLE);
 	}
+}
+
+
+void SudokuGUI::show_store_rank() {
+	if (store_rank == NULL) {
+		store_rank = new StoreRankGUI(rank);
+	}
+	store_rank->set_informations(mode, timer->get_time());
+	store_rank->show();
 }
 
 /*===========================\
@@ -384,6 +436,15 @@ bool SudokuGUI::judge() {
 		}
 		disable_buttons();
 		/* you finish the puzzle */
+		int time_int = StoreRankGUI::time2int(timer->get_time());
+		char name[NAMESIZE];
+		double time_double_lowest = 0;
+		int time_int_lowest = rank->fetch_rank
+		(mode, BOARD_COUNT_MAX, name, time_double_lowest);
+		if (time_int < (int)time_double_lowest) {
+			show_store_rank();
+			show_board();
+		}
 	}
 	else {
 		checking = true;
@@ -407,6 +468,7 @@ void SudokuGUI::new_puzzle(int difficulty) {
 		cancel_checking();
 		cancel_tracking();
 		new_game(difficulty);
+
 	}
 }
 
@@ -477,4 +539,13 @@ void SudokuGUI::tip() {
 		cur_rowno = -1;
 		cur_colno = -1;
 	}
+}
+
+void SudokuGUI::show_board() {
+	if (this->board == NULL) {
+		this->board = new BoardGUI(rank);
+		
+		
+	}
+	board->show();
 }

@@ -8,6 +8,9 @@
 #include <QLineEdit>
 #include <QLCDNumber>
 #include <iostream>
+#include "core.h"
+#include "rank.h"
+#include "storeRankGUI.h"
 
 #define SIZE 9
 #define BOX_SIZE 50
@@ -69,6 +72,7 @@ for (int j = ((blockno) % 3) * 3; j < ((blockno) % 3) * 3 + 3; j++)
 using namespace std;
 
 class Timer;
+class BoardGUI;
 
 class SudokuGUI : public QMainWindow
 {
@@ -82,21 +86,29 @@ public:
 
 private:
 	Ui::SudokuGUIClass ui;
+	BoardGUI* board = NULL;
+	StoreRankGUI* store_rank = NULL;
+
 	int cur_rowno = -1;
 	int cur_colno = -1;
 	QPushButton* curbtn = NULL;	// -- grid to fill
 	QPushButton* buttons[SIZE][SIZE];	// -- grids
 	QPushButton* input_buttons[INPUTS_COUNT];	// -- input buttons from 1 to 9
 	QPushButton* func_buttons[FUNCTIONS_COUNT]; // -- function buttons
+	QLineEdit* grid_count = NULL;
 
 	Timer* timer = NULL;		// -- timer
 	int numbers[SIZE][SIZE];	// -- the digit of grids
 	bool checking = false;		// -- red grids exists
 	bool tracking = false;		// -- is tracking numbers?
 	int difficulty = 0;			// -- difficuly
-	int remaining_grid_number = -1;		// -- the number of the unfilling grids
+	int unfilled_grid_count = -1;		// -- the number of the unfilling grids
 	int sudoku[SIZE * SIZE];	// -- the final sudoku
 	int puzzle[SIZE * SIZE]; // -- puzzle
+	int mode = 0;
+
+	Core* core = NULL;
+	Rank* rank = NULL;
 
 	void create_grids();
 	void create_input_buttons();
@@ -109,6 +121,8 @@ private:
 	void restore_grids_style();
 	void disable_buttons();
 	void enable_buttons();
+	void show_store_rank();
+	
 
 public slots:
 	void record_button(int gridno);
@@ -118,4 +132,5 @@ public slots:
 	void set_tracking();
 	void filter();
 	void tip();
+	void show_board();
 };

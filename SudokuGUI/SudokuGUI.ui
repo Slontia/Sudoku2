@@ -36,8 +36,17 @@
      <addaction name="action_hard"/>
     </widget>
     <addaction name="menu_newGame"/>
+    <addaction name="action_leading_board"/>
+   </widget>
+   <widget class="QMenu" name="menu_about">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="action_help"/>
+    <addaction name="action_about"/>
    </widget>
    <addaction name="menu_game"/>
+   <addaction name="menu_about"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action123">
@@ -77,6 +86,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+2</string>
+   </property>
+  </action>
+  <action name="action_leading_board">
+   <property name="text">
+    <string>Leading Board</string>
+   </property>
+  </action>
+  <action name="action_help">
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="action_about">
+   <property name="text">
+    <string>About Sudoku</string>
    </property>
   </action>
  </widget>

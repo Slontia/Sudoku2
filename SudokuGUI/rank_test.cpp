@@ -1,6 +1,10 @@
 #include "rank.h"
 
 
+#define EASY 0
+#define MID 1
+#define HARD 2
+
 int main_rank_test() {
 
 	Rank rank;

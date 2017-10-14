@@ -2,10 +2,6 @@
 #define NAMESIZE 20
 #define ENTRYSIZE 100
 
-#define EASY 0
-#define MID 1
-#define HARD 2
-
 #define MODE_COUNT 3
 #define NIL (-1)
 

@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include"ctime"  
+#include"cstdlib"
 
 int get_valuebit(Box* member) {
 	return (1 << ((member->cervalue) - 1));
@@ -62,4 +64,38 @@ bool read_file(FILE* f, int sudoku[SIZE*SIZE])
 		}
 	}
 	return readin == 81;
+}
+
+  
+#define MAX 20000  
+
+struct element {     //用来排序的数据结构   
+	int data;  // 数据   
+	int index;  // 序号   
+};
+int cmp(const void *a, const void *b); //升序排列   
+void rand_of_n(int a[], int n);  //产生 1-n 的随机排列并存到 a[] 中   
+int main_rand_of_n() {
+	int a[MAX];
+	int i, n = 10;
+	rand_of_n(a, n);
+	for (i = 0; i<n; i++)
+		cout << a[i] << " ";
+	return 0;
+}
+
+int cmp(const void *a, const void *b) {   // 升序排序  
+	return((struct element*)a)->data - ((struct element*)b)->data;
+}
+void rand_of_n(int a[], int n) {
+	int i;
+	struct element ele[MAX];
+	for (i = 0; i<n; i++) {
+		ele[i].data = rand();  // 随机生成一个数   
+		ele[i].index = i + 1;
+	}
+	qsort(ele, n, sizeof(ele[0]), cmp);  //排序   
+	for (i = 0; i<n; i++) {
+		a[i] = ele[i].index;
+	}
 }

@@ -73,15 +73,19 @@ int get_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 
 
 int get_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
-	do {
-		for (int i = 0; i < SIZE*SIZE; i++) { // initialize
-			puzzle[i] = 0;
-		}
-		set_number_randomly(puzzle); // set numbers
-	} while (!create_final_sudoku(puzzle)); // create final sudoku
+	int rand_row[SIZE];
+	int rand_col[SIZE];
+	for (int i = 0; i < SIZE*SIZE; i++) {
+		puzzle[i] = 0;
+	}
+	rand_of_n(rand_row, SIZE);
+	rand_of_n(rand_col, SIZE);
+	for (int i = 0; i < SIZE; i++) {
+		puzzle[9*(rand_row[i]-1)+ rand_col[i]-1] = i+1;
+	}
+	create_final_sudoku(puzzle); // create final sudoku
 	return create_puzzle(puzzle, puzzle, lower, upper); // clean grids
 }
-
 
 void set_number_randomly(int sudoku[SIZE * SIZE]) {
 	int position;
@@ -107,15 +111,11 @@ int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 	}
 	int all_freebox_num = (rand() % (upper - lower + 1)) + lower;
 	int cleaned_num = dig(sudoku, puzzle, all_freebox_num);
-	/*for (int i = 0; i < SIZE * SIZE; i++) {
-		cout << puzzle[i];
-	}*/
-	//cout << cleaned_num << endl;
+
 	int freebox_num = all_freebox_num - cleaned_num;
 	if (freebox_num == 0) {
 		return all_freebox_num;
 	}
-
 	
 
 

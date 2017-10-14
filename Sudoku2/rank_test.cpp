@@ -1,5 +1,7 @@
 #include "stdafx.h"
-
+#define EASY 0
+#define MID 1
+#define HARD 2
 
 int main_rank_test() {
 
@@ -7,14 +9,14 @@ int main_rank_test() {
 	char name[NAMESIZE];
 	double time;
 
-	//rank.clear();
+	rank.clear();
 	cout << 1 << endl;
 	rank.record(EASY, 2, "kirito");
 	cout << 2 << endl;
 	rank.record(EASY, 3, "asuna");
 	cout << 3 << endl;
 	rank.record(EASY, 4, "abcd");
-	rank.record(EASY, 2.5, "シマザキセツナ");
+	rank.record(EASY, 2, "シマザキセツナ");
 	rank.record(EASY, 1, "一二三四五六七八九2");
 	rank.record(EASY, 1, "我是智障神经病事实上事实上所所所所所");
 	cout << "finish record" << endl;

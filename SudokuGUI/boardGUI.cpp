@@ -1,10 +1,15 @@
 #include "boardGUI.h"
 #include "rank.h"
 #include <qdebug.h>
+#include "difficulty.h"
 #define BOARD_FONT QFont("Times", 10, QFont::Bold)
 #define BOARD_STYLE "QTextEdit{\
 		color:#000000;\
 	}"
+
+#define EASY_INDEX 0
+#define NORMAL_INDEX 1
+#define HARD_INDEX 2
 
 
 BoardGUI::BoardGUI(Rank* rank, QWidget *parent)
@@ -29,9 +34,9 @@ BoardGUI::BoardGUI(Rank* rank, QWidget *parent)
 	}
 
 	this->setWindowTitle(QApplication::translate("Rank", "Rank", Q_NULLPTR));
-	tabWidget->setTabText(tabWidget->indexOf(boards[EASY]), QApplication::translate("Form", "Easy", Q_NULLPTR));
-	tabWidget->setTabText(tabWidget->indexOf(boards[MID]), QApplication::translate("Form", "Normal", Q_NULLPTR));
-	tabWidget->setTabText(tabWidget->indexOf(boards[HARD]), QApplication::translate("Form", "Hard", Q_NULLPTR));
+	tabWidget->setTabText(tabWidget->indexOf(boards[EASY_INDEX]), QApplication::translate("Form", "Easy", Q_NULLPTR));
+	tabWidget->setTabText(tabWidget->indexOf(boards[NORMAL_INDEX]), QApplication::translate("Form", "Normal", Q_NULLPTR));
+	tabWidget->setTabText(tabWidget->indexOf(boards[HARD_INDEX]), QApplication::translate("Form", "Hard", Q_NULLPTR));
 	
 	
 	//boards[EASY] = new QWidget();
@@ -85,8 +90,8 @@ BoardGUI::BoardGUI(Rank* rank, QWidget *parent)
 	if (rank->clear()) {
 		cout << "clear error!" << endl;
 	}
-	rank->record(EASY, 2, "132132");
-	rank->record(EASY, 3, "99999");
+	rank->record(EASY_INDEX, 2, "132132");
+	rank->record(EASY_INDEX, 3, "99999");
 	rank->encrypt_flush(ENCRYPT);
 	init_board();
 	/*rank->fetch_rank(0, 1, name1, time);

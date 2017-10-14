@@ -7,6 +7,7 @@
 #include <qdebug>
 #include "rank.h"
 #include "boardGUI.h"
+#include "storeRankGUI.h"
 
 SudokuGUI::SudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
@@ -232,7 +233,8 @@ void SudokuGUI::new_game(int difficulty) {
 	this->unfilled_grid_count = 0;
 	int puzzle_receiver[1][SIZE*SIZE];
 
-	//core.generate(1, 55, 55, true, puzzle_receiver);
+	//core->generate(1, 55, 55, true, puzzle_receiver);
+	qDebug() << (long int)core << endl;
 	core->generate(1, difficulty, puzzle_receiver);
 	qDebug() << "2222222" << endl;
 	
@@ -468,7 +470,7 @@ void SudokuGUI::new_puzzle(int difficulty) {
 		cancel_checking();
 		cancel_tracking();
 		new_game(difficulty);
-
+		qDebug() << difficulty << endl;
 	}
 }
 

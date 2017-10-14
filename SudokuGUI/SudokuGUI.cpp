@@ -8,6 +8,9 @@
 #include "rank.h"
 #include "boardGUI.h"
 #include "storeRankGUI.h"
+#include <QCloseEvent>
+#include <QString>
+#define REMAINING_TEXT (QString)"Remaining: "
 
 SudokuGUI::SudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
@@ -16,7 +19,7 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 	this->rank = new Rank();
 
 	ui.setupUi(this);
-	setFixedSize(760, 570);
+	setFixedSize(760, 560);
 	/* menu */
 	binding_actions();
 	/* sudoku */
@@ -30,7 +33,7 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 	time_lcd->setDigitCount(12);
 	time_lcd->setMode(QLCDNumber::Dec);
 	time_lcd->setSegmentStyle(QLCDNumber::Flat);
-	time_lcd->setGeometry(550, 115, 200, 50);
+	time_lcd->setGeometry(530, 115, 200, 50);
 	//time_lcd->setPalette(Qt::red);
 	//QPalette palette = time_lcd->palette();
 	//palette.setColor(QPalette::Normal, QPalette::WindowText, Qt::red);
@@ -39,8 +42,12 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 
 	grid_count = new QLineEdit(this);
 	grid_count->setEnabled(false);
-	grid_count->setGeometry(550, 60, 200, 50);
-	grid_count->setFont(FUNCTION_FONT);
+	grid_count->setGeometry(530, 80, 180, 30);
+	grid_count->setFont(REMAINING_FONT);
+	grid_count->setText("Sudoku");
+	grid_count->setAlignment(Qt::AlignCenter);
+	grid_count->setStyleSheet("color:black");
+
 }
 
 /*===========================\
@@ -50,28 +57,28 @@ void SudokuGUI::create_func_buttons() {
 	/* check */
 	func_buttons[CHECK] = new QPushButton("Check", this);
 	QPushButton* check_button = func_buttons[CHECK];
-	check_button->setGeometry(547, 410, 2 * BOX_SIZE, BOX_SIZE); // set position & size
+	check_button->setGeometry(527, 410, 2 * BOX_SIZE, BOX_SIZE); // set position & size
 	check_button->setFont(FUNCTION_FONT); // set fond
 	check_button->setStyleSheet(FUNCTION_BUTTON_STYLE); // set color
 	QObject::connect(check_button, SIGNAL(clicked()), this, SLOT(judge()));
 	/* filter */
 	func_buttons[FILTER] = new QPushButton("Filter", this);
 	QPushButton* filter_button = func_buttons[FILTER];
-	filter_button->setGeometry(547, 465, 2 * BOX_SIZE, BOX_SIZE); // set position & size
+	filter_button->setGeometry(632, 465, 2 * BOX_SIZE, BOX_SIZE); // set position & size
 	filter_button->setFont(FUNCTION_FONT); // set fond
 	filter_button->setStyleSheet(FUNCTION_BUTTON_STYLE); // set color
 	QObject::connect(filter_button, SIGNAL(clicked()), this, SLOT(filter()));
 	/* tip */
 	func_buttons[TIP] = new QPushButton("Tip", this);
 	QPushButton* tip_button = func_buttons[TIP];
-	tip_button->setGeometry(652, 410, 2 * BOX_SIZE, BOX_SIZE); // set position & size
+	tip_button->setGeometry(632, 410, 2 * BOX_SIZE, BOX_SIZE); // set position & size
 	tip_button->setFont(FUNCTION_FONT); // set fond
 	tip_button->setStyleSheet(FUNCTION_BUTTON_STYLE); // set color 
 	QObject::connect(tip_button, SIGNAL(clicked()), this, SLOT(tip()));
 	/* track */
 	func_buttons[TRACK] = new QPushButton("Track", this);
 	QPushButton* track_button = func_buttons[TRACK];
-	track_button->setGeometry(652, 465, 2 * BOX_SIZE, BOX_SIZE); // set position & size
+	track_button->setGeometry(527, 465, 2 * BOX_SIZE, BOX_SIZE); // set position & size
 	track_button->setFont(FUNCTION_FONT); // set fond
 	track_button->setStyleSheet(FUNCTION_BUTTON_STYLE); // set color
 	QObject::connect(track_button, SIGNAL(clicked()), this, SLOT(set_tracking()));
@@ -88,7 +95,7 @@ void SudokuGUI::create_grids() {
 			QPushButton* btn = buttons[i][j];
 
 			btn->setGeometry(
-				(j + 1) * BOX_SIZE + (j / 3) * 10,
+				(j + 1) * BOX_SIZE + (j / 3) * 10 - 20,
 				(i + 1) * BOX_SIZE + (i / 3) * 10,
 				BOX_SIZE,
 				BOX_SIZE
@@ -113,7 +120,7 @@ void SudokuGUI::create_input_buttons() {
 		input_buttons[i] = new QPushButton(num, this);
 		QPushButton* btn = input_buttons[i];
 		btn->setGeometry(
-			((i - 1) % 3 + 1) * BOX_SIZE + 520 + ((i - 1) % 3) * 5,
+			((i - 1) % 3 + 1) * BOX_SIZE + 500 + ((i - 1) % 3) * 5,
 			((i - 1) / 3 + 1) * BOX_SIZE + 130 + ((i - 1) / 3) * 5,
 			BOX_SIZE,
 			BOX_SIZE
@@ -126,7 +133,7 @@ void SudokuGUI::create_input_buttons() {
 	/* Clean */
 	input_buttons[0] = new QPushButton("Clean", this);
 	QPushButton* clean_button = input_buttons[0];
-	clean_button->setGeometry(570, 345, 2 * BOX_SIZE + 5, BOX_SIZE); // set position & size
+	clean_button->setGeometry(570, 345, 2 * BOX_SIZE + 15, BOX_SIZE); // set position & size
 	clean_button->setFont(FUNCTION_FONT); // set fond
 	clean_button->setStyleSheet(INPUT_BOTTON_STYLE); // set color
 	QObject::connect(clean_button, SIGNAL(clicked()), mapper, SLOT(map()));
@@ -203,7 +210,7 @@ void SudokuGUI::set_number(int x) {
 		if (x == CLEAN) {
 			if (*intptr != CLEAN) {
 				sprintf(unfilled_grid_count_str, "%d", ++unfilled_grid_count);
-				grid_count->setText(unfilled_grid_count_str);
+				grid_count->setText(REMAINING_TEXT + unfilled_grid_count_str);
 			}
 			curbtn->setText("");
 			*intptr = 0;
@@ -211,13 +218,16 @@ void SudokuGUI::set_number(int x) {
 		else {
 			if (*intptr == CLEAN) {
 				sprintf(unfilled_grid_count_str, "%d", --unfilled_grid_count);
-				grid_count->setText(unfilled_grid_count_str);
+				grid_count->setText(REMAINING_TEXT + unfilled_grid_count_str);
 			}
 			char num[2];
 			num[0] = x + '0';
 			num[1] = '\0';
 			curbtn->setText(num);
 			*intptr = x;
+			if (unfilled_grid_count == 0) {
+				judge(); // if fill the last grid, check
+			}
 		}
 	}
 }
@@ -256,7 +266,7 @@ void SudokuGUI::new_game(int difficulty) {
 
 	char unfilled_grid_count_str[3];
 	sprintf(unfilled_grid_count_str, "%d", unfilled_grid_count);
-	grid_count->setText(unfilled_grid_count_str);
+	grid_count->setText(REMAINING_TEXT + unfilled_grid_count_str);
 
 	qDebug() << "333333333333" << endl;
 
@@ -303,6 +313,14 @@ void SudokuGUI::new_game(int difficulty) {
 	qDebug() << "5555555555" << endl;
 
 	enable_buttons();
+	if (difficulty <= NORMAL) {
+		func_buttons[FILTER]->setEnabled(false);
+		func_buttons[FILTER]->setStyleSheet(DISABLE_FUNCTION_STYLE);
+	}
+	if (difficulty <= EASY) {
+		func_buttons[TRACK]->setEnabled(false);
+		func_buttons[TRACK]->setStyleSheet(DISABLE_FUNCTION_STYLE);
+	}
 
 	qDebug() << "6666666666" << endl;
 
@@ -345,7 +363,7 @@ void SudokuGUI::enable_buttons() {
 
 void SudokuGUI::show_store_rank() {
 	if (store_rank == NULL) {
-		store_rank = new StoreRankGUI(rank);
+		store_rank = new StoreRankGUI(rank, board);
 	}
 	store_rank->set_informations(mode, timer->get_time());
 	store_rank->show();
@@ -425,8 +443,8 @@ bool SudokuGUI::judge() {
 			}
 		}
 	}
-
-	if (pass) {
+	//if (pass) {
+	if (true) {
 		timer->stop();
 		QPushButton* btn;
 		for (int i = 0; i < SIZE; i++) {
@@ -441,11 +459,11 @@ bool SudokuGUI::judge() {
 		int time_int = StoreRankGUI::time2int(timer->get_time());
 		char name[NAMESIZE];
 		double time_double_lowest = 0;
-		int time_int_lowest = rank->fetch_rank
-		(mode, BOARD_COUNT_MAX, name, time_double_lowest);
-		if (time_int < (int)time_double_lowest) {
+		bool exist = rank->fetch_rank(mode, ENTRYSIZE, name, time_double_lowest);
+		qDebug() << time_int << endl;
+		qDebug() << (int)time_double_lowest << endl;
+		if (!exist || time_int < (int)time_double_lowest) {
 			show_store_rank();
-			show_board();
 		}
 	}
 	else {
@@ -546,8 +564,22 @@ void SudokuGUI::tip() {
 void SudokuGUI::show_board() {
 	if (this->board == NULL) {
 		this->board = new BoardGUI(rank);
-		
-		
 	}
-	board->show();
+	this->board->init_board();
+	this->board->show();
+}
+
+void SudokuGUI::closeEvent(QCloseEvent* event) {
+	if (QMessageBox::Yes == QMessageBox::question(
+		this,
+		"Exit",
+		"Ready to exit?",
+		QMessageBox::Yes | QMessageBox::No,
+		QMessageBox::No
+	)) {
+		event->accept();
+	}
+	else {
+		event->ignore();
+	}
 }

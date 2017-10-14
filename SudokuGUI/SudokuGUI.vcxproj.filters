@@ -81,17 +81,8 @@
     <ClCompile Include="GeneratedFiles\Command\moc_boardGUI.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_storeRankGUI2.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_storeRankGUI.cpp">
       <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_storeRankGUI2.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Command\moc_storeRankGUI2.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="storeRankGUI2.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,17 +107,8 @@
     <CustomBuild Include="storeRankGUI.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="storeRankGUI2.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="GeneratedFiles\Debug\storeRankGUI2.moc">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="GeneratedFiles\Release\storeRankGUI2.moc">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="GeneratedFiles\Command\storeRankGUI2.moc">
-      <Filter>Generated Files</Filter>
+    <CustomBuild Include="About.ui">
+      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="rank.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_About.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

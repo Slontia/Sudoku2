@@ -11,6 +11,8 @@
 #define LOWERS {35, 45, 55}
 #define UPPERS {35, 45, 55}
 
+#define DIVISION 35
+
 using namespace std;
 
 void Core::generate(int number, int mode, int result[][SIZE * SIZE]) {
@@ -81,10 +83,16 @@ int get_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
 	rand_of_n(rand_row, SIZE);
 	rand_of_n(rand_col, SIZE);
 	for (int i = 0; i < SIZE; i++) {
-		puzzle[9*(rand_row[i]-1)+ rand_col[i]-1] = i+1;
+		puzzle[9 * (rand_row[i] - 1) + rand_col[i] - 1] = i + 1;
 	}
 	create_final_sudoku(puzzle); // create final sudoku
-	return create_puzzle(puzzle, puzzle, lower, upper); // clean grids
+	if (upper <= DIVISION) {
+		return create_puzzle(puzzle, lower, upper); // Slontia
+	}
+	else {
+		return create_puzzle(puzzle, puzzle, lower, upper); // Hitaku
+	}
+	
 }
 
 void set_number_randomly(int sudoku[SIZE * SIZE]) {
@@ -116,35 +124,7 @@ int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 	if (freebox_num == 0) {
 		return all_freebox_num;
 	}
-	
 
-
-	//bool cleaned_recorder[SIZE * SIZE] = { 0 };
-	//for (int i = 0; i < SIZE*SIZE; i++) cout << cleaned_recorder[i] << endl;
-
-	/*for (int i = 0; i < SIZE * SIZE; i++) {
-		if (puzzle[i] == 0) {
-			cleaned_recorder[i] = true;
-		}
-	}
-
-	for (int i = 0; i < freebox_num; i++) {
-		int free_position = rand() % (SIZE * SIZE - cleaned_num - i);
-		int free_gird_index = 0;
-		int gridno;
-		for (gridno = 0; gridno < SIZE*SIZE; gridno++) {
-			if (!cleaned_recorder[gridno]) {
-				if (free_position == free_gird_index++) {
-					break;
-				}
-				
-			}
-		}
-		//cout << "TEST" << (puzzle[gridno] != 0);
-		puzzle[gridno] = 0;
-		cleaned_recorder[gridno] = true;
-	}*/
-	
 	int cleaned_recorder_int[SIZE] = { 0 }; // for blocks
 	int cleaned_counter[SIZE] = { 0 }; // for blocks
 	for (int blockno = 0; blockno < SIZE; blockno++) { // each block
@@ -186,7 +166,7 @@ int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 
 
 
-/*void clean_each_block_grids(int clean_count, int puzzle[SIZE * SIZE]) {
+void clean_each_block_grids(int clean_count, int puzzle[SIZE * SIZE]) {
 	int cleaned_recorder_int;
 	for (int i = 0; i < SIZE; i++) { // each block
 		cleaned_recorder_int = 0;
@@ -226,4 +206,4 @@ int create_puzzle(int puzzle[SIZE * SIZE], int lower, int upper) {
 		puzzle[randpos] = 0;
 	}
 	return all_freebox_num;
-}*/
+}

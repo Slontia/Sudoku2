@@ -1,8 +1,11 @@
 #pragma once
+#pragma execution_character_set("utf-8")
 
 #include <QtWidgets/QMainWindow>
 #include "ui_Board.h"
 #include <QTextEdit>
+#include <QScrollArea>
+#include <QLabel>
 #define BOARD_COUNT_MAX 10
 #define MODE_COUNT 3
 #define NAMESIZE 20
@@ -17,7 +20,8 @@ class BoardGUI : public QWidget
 
 public:
 	BoardGUI(Rank* rank, QWidget *parent = Q_NULLPTR);
-
+	void init_board();
+	void change_tab(int mode);
 
 private:
 	char* names[MODE_COUNT][BOARD_COUNT_MAX];
@@ -29,6 +33,5 @@ private:
 	QWidget* boards[MODE_COUNT];
 	QTextEdit* texts[MODE_COUNT];
 
-	void init_board();
 	void show_board();
 };

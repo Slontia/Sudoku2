@@ -1,6 +1,6 @@
 #pragma once
 #define NAMESIZE 20
-#define ENTRYSIZE 100
+#define ENTRYSIZE 10
 
 #define MODE_COUNT 3
 #define NIL (-1)

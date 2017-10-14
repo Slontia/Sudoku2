@@ -17,6 +17,7 @@
 
 /* STYLE */
 #define FUNCTION_FONT QFont("Times", 16, QFont::Bold)
+#define REMAINING_FONT QFont("Times", 14, QFont::Bold)
 #define UNCERTAIN_GRID_STYLE "QPushButton{\
 	background-color:#AFEEEE;\
 }"
@@ -82,7 +83,7 @@ public:
 	SudokuGUI(QWidget *parent = Q_NULLPTR);
 
 	void new_game(int difficulty);
-
+	void closeEvent(QCloseEvent* event);
 
 private:
 	Ui::SudokuGUIClass ui;
@@ -122,6 +123,9 @@ private:
 	void disable_buttons();
 	void enable_buttons();
 	void show_store_rank();
+
+protected:
+	
 	
 
 public slots:

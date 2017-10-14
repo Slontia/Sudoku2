@@ -17,18 +17,18 @@ BoardGUI::BoardGUI(Rank* rank, QWidget *parent)
 	//ui.setupUi(this);
 	setEnabled(true);
 	resize(388, 438);
-	setFixedSize(388, 438);
+	setFixedSize(388, 450);
 
 	tabWidget = new QTabWidget(this);
 	tabWidget->setObjectName(QStringLiteral("tabWidget"));
 	tabWidget->setEnabled(true);
-	tabWidget->setGeometry(QRect(20, 20, 350, 400));
+	tabWidget->setGeometry(QRect(20, 20, 350, 420));
 	for (int i = 0; i < MODE_COUNT; i++) {
-		boards[i] = new QWidget();
+		boards[i] = new QWidget(tabWidget);
 		tabWidget->addTab(boards[i], QString());
 		texts[i] = new QTextEdit(boards[i]);
 		texts[i]->setEnabled(false);
-		texts[i]->setGeometry(QRect(0, 0, 350, 400));
+		texts[i]->setGeometry(QRect(0, 0, 350, 440));
 		texts[i]->setStyleSheet(BOARD_STYLE);
 		texts[i]->setFont(BOARD_FONT);
 	}
@@ -87,12 +87,12 @@ BoardGUI::BoardGUI(Rank* rank, QWidget *parent)
 	char name1[NAMESIZE];
 	char name2[NAMESIZE];
 	double time;
-	if (rank->clear()) {
+	/*if (rank->clear()) {
 		cout << "clear error!" << endl;
-	}
-	rank->record(EASY_INDEX, 2, "132132");
-	rank->record(EASY_INDEX, 3, "99999");
-	rank->encrypt_flush(ENCRYPT);
+	}*/
+	//rank->record(EASY_INDEX, 2, "132132");
+	//rank->record(EASY_INDEX, 3, "99999");
+	//rank->encrypt_flush(ENCRYPT);
 	init_board();
 	/*rank->fetch_rank(0, 1, name1, time);
 	rank->encrypt_flush(ENCRYPT);
@@ -109,7 +109,9 @@ void BoardGUI::init_board() {
 			(mode, 1, BOARD_COUNT_MAX, names[mode], times[mode]);
 		QString text = "";
 		for (int i = 0; i < lengths[mode]; i++) {
-			text += (QString)"No." + (i + '1') + "\n" + names[mode][i] + "\t";
+			char rank_num[3];
+			sprintf(rank_num, "%d", i + 1);
+			text += (QString)"-- No." + rank_num + " --\n" + names[mode][i] + "\t";
 			long time = (long)times[mode][i];
 			int ms, s, min, h;
 			char ms_str[10], s_str[10], min_str[10], h_str[10];
@@ -132,4 +134,8 @@ void BoardGUI::init_board() {
 
 void BoardGUI::show_board() {
 	
+}
+
+void BoardGUI::change_tab(int mode) {
+	this->tabWidget->setCurrentIndex(mode);
 }

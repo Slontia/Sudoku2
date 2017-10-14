@@ -75,14 +75,15 @@ bool Core::solve(int puzzle[SIZE * SIZE], int solution[SIZE * SIZE]) {
 	return true;
 }
 
-int Core::solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int number,
+int solve(int puzzle[][SIZE * SIZE], int solution[][SIZE * SIZE], int number,
 	int insolvable_recorder[]) {
 	int solutions_counter = 0;
 
+	Core core;
 	int insolvable_counter = 0;
 	for (int i = 0; i < number; i++) {
 		try {
-			if (solve(puzzle[i], solution[solutions_counter])) {
+			if (core.solve(puzzle[i], solution[solutions_counter])) {
 				solutions_counter++;
 			}
 			else {

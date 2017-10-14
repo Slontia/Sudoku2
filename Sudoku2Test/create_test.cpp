@@ -118,7 +118,7 @@ namespace Sudoku2Test
 			core.generate(number, lower, upper, unique, result);
 			//core.output_file("sudoku.txt", result, number);
 			unique_solution_judge(number, result);
-			int solved_count = core.solve(result, result, number, insolvable_recorder);
+			int solved_count = solve(result, result, number, insolvable_recorder);
 			Assert::AreEqual(number, solved_count);
 			repeated_judge(number, result);
 			//core.output_file("sudoku2.txt", result, number);

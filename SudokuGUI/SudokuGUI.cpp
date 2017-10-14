@@ -444,7 +444,7 @@ bool SudokuGUI::judge() {
 		}
 	}
 	//if (pass) {
-	if (true) {
+	if (pass) {
 		timer->stop();
 		QPushButton* btn;
 		for (int i = 0; i < SIZE; i++) {

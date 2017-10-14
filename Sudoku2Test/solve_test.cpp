@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include <iostream>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -111,7 +112,12 @@ namespace Sudoku2Test
 		}
 
 		TEST_METHOD(good_file) {
-			FILE* ftest = fopen("puzzle.txt", "w");
+			FILE* ftest;
+			int erno = fopen_s(&ftest, "puzzle.txt", "w");
+			if (ftest == NULL) {
+				cout << erno << endl;
+				Assert::Fail();
+			}
 			Core core;
 			fputs(
 				"4 1 7 2 3 8 6 5 9\n\
@@ -137,7 +143,12 @@ namespace Sudoku2Test
 		}
 	
 		TEST_METHOD(incompleted_sudoku) {
-			FILE* ftest = fopen("puzzle.txt", "w");
+			FILE* ftest;
+			int erno = fopen_s(&ftest, "puzzle.txt", "w");
+			if (ftest == NULL) {
+				cout << erno << endl;
+				Assert::Fail();
+			}
 			Core core;
 			fputs(
 				"4 1 7 2 3 8 6 5 9\n\

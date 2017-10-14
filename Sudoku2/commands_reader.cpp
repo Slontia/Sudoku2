@@ -173,7 +173,7 @@ int read_command(int argc, char* argv[]) {
 		to_solve_puzzle_count = core.input_file(filename, from_file_sudokus);
 		cout << "SOLVE:" << filename << endl;
 		solved_puzzle_count =
-			core.solve(from_file_sudokus, to_file_sudokus,
+			solve(from_file_sudokus, to_file_sudokus,
 				to_solve_puzzle_count, unsolvable_recorder);
 		cout << "UNSOLVED PUZZLE INDEX:\n";
 		for (int i = 0; i < to_solve_puzzle_count - solved_puzzle_count; i++) {

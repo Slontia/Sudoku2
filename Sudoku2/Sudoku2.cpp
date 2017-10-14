@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "iostream"
 
-int main(int argc, char* argv[]) {
+int main_(int argc, char* argv[]) {
 	try {
 		read_command(argc, argv);
 	}

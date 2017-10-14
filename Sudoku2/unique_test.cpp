@@ -20,7 +20,7 @@ int main_unique_test() {
 		cout << "Cannot open test file." << endl;
 	}
 	while (read_file(r, mat)) {
-		int blank = dig(mat, mat, 55);
+		int blank = dig(mat, mat, 1);
 		//Assert::AreEqual(unique_test(mat, mat), 1);
 		//int unique = unique_test(mat, mat);
 		//cout << "count: " << unique << endl;

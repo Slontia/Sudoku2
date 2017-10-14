@@ -28,8 +28,9 @@ int main_dig() {
 int dig(int mat[SIZE*SIZE], int out[SIZE*SIZE], int dig_tg) {
 	UnitMaps unitmaps;
 	unitmaps.read_matrix(mat);
-	try_dig(unitmaps, HOLE_I, HOLE_J, 0 , dig_tg, out);
+	try_dig(unitmaps, rand() % SIZE, rand() % SIZE, 0 , dig_tg, out);
 	//unitmaps.show();
+	unitmaps.dump_matrix2arr(out);
 	return unitmaps.blank;
 }
 
@@ -47,6 +48,5 @@ bool try_dig(UnitMaps & unitmaps, int dig_x, int dig_y, int dig_count, int dig_t
 		}
 	}
 	//cout << "failure" << endl;
-	unitmaps.dump_matrix2arr(out);
 	return false;
 }

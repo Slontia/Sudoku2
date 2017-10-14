@@ -110,7 +110,7 @@ int create_puzzle(int sudoku[SIZE * SIZE], int puzzle[SIZE * SIZE],
 	}
 	int all_freebox_num = (rand() % (upper - lower + 1)) + lower;
 	int cleaned_num = dig(sudoku, puzzle, all_freebox_num);
-	//cout << cleaned_num << endl;
+	//display_1d(puzzle, 81, 9);
 	int freebox_num = all_freebox_num - cleaned_num;
 	if (freebox_num == 0) {
 		return all_freebox_num;

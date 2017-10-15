@@ -243,8 +243,6 @@ void SudokuGUI::set_number(int x) {
 
 
 void SudokuGUI::new_game(int difficulty) {
-	FILE* fout;
-
 	this->mode = difficulty - 1;
 	this->tipped_bool = false;
 
@@ -259,7 +257,6 @@ void SudokuGUI::new_game(int difficulty) {
 	qDebug() << "2222222" << endl;
 	
 
-	fout = fopen("C:/Users/65486/Desktop/debug.txt", "w");
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			tipped[i][j] = 0;
@@ -267,38 +264,18 @@ void SudokuGUI::new_game(int difficulty) {
 			this->puzzle[gridno] = puzzle_receiver[0][gridno];
 			if (puzzle[gridno] == 0) {
 				unfilled_grid_count++;
-			}
-			fputc(puzzle[gridno] + '0', fout);
-			
+			}		
 		}
-		fputc('\n', fout);
 	}
-	fputc('\n', fout);
 
 	char unfilled_grid_count_str[3];
 	sprintf(unfilled_grid_count_str, "%d", unfilled_grid_count);
 	grid_count->setText(REMAINING_TEXT + unfilled_grid_count_str);
 
-	qDebug() << "333333333333" << endl;
-
 	core->solve(puzzle_receiver[0], this->sudoku);
-
-	for (int i = 0; i < SIZE; i++) {
-		for (int j = 0; j < SIZE; j++) {
-			//this->puzzle[GET_GRIDNO(i, j)] = puzzle_receiver[0][GET_GRIDNO(i, j)];
-			//fputc(sudoku[GET_GRIDNO(i, j)] + '0', fout);
-			fprintf(fout, "%d", sudoku[GET_GRIDNO(i, j)]);
-		}
-		fputc('\n', fout);
-	}
-	fputc('\n', fout);
-
-	fclose(fout);
 
 	int index = 0;
 	int digit;
-
-	qDebug() << "444444444444" << endl;
 
 	QPushButton* btn;
 	for (int i = 0; i < SIZE; i++) {

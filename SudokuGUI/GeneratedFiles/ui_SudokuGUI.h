@@ -108,7 +108,7 @@ public:
         action_normal->setShortcut(QApplication::translate("SudokuGUIClass", "Ctrl+1", Q_NULLPTR));
         action_hard->setText(QApplication::translate("SudokuGUIClass", "Hard", Q_NULLPTR));
         action_hard->setShortcut(QApplication::translate("SudokuGUIClass", "Ctrl+2", Q_NULLPTR));
-        action_leading_board->setText(QApplication::translate("SudokuGUIClass", "Leading Board", Q_NULLPTR));
+        action_leading_board->setText(QApplication::translate("SudokuGUIClass", "Leaderboard", Q_NULLPTR));
         action_help->setText(QApplication::translate("SudokuGUIClass", "Help", Q_NULLPTR));
         action_about->setText(QApplication::translate("SudokuGUIClass", "About Sudoku", Q_NULLPTR));
         menu_game->setTitle(QApplication::translate("SudokuGUIClass", "Game", Q_NULLPTR));

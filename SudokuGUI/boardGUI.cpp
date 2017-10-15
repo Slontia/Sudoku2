@@ -97,7 +97,8 @@ void BoardGUI::clear_board() {
 		QMessageBox::Yes | QMessageBox::No,
 		QMessageBox::No
 	)) {
-		this->rank->clear();
+		rank->clear();
+		rank->encrypt_flush(ENCRYPT);
 		init_board();
 	}
 }

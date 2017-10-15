@@ -31,16 +31,16 @@ public:
     {
         if (AboutUI->objectName().isEmpty())
             AboutUI->setObjectName(QStringLiteral("AboutUI"));
-        AboutUI->resize(413, 250);
+        AboutUI->resize(439, 250);
         textEdit = new QTextEdit(AboutUI);
         textEdit->setObjectName(QStringLiteral("textEdit"));
         textEdit->setEnabled(false);
-        textEdit->setGeometry(QRect(20, 20, 381, 131));
+        textEdit->setGeometry(QRect(10, 10, 421, 131));
         textEdit->setStyleSheet(QStringLiteral("color:black"));
         textEdit_2 = new QTextEdit(AboutUI);
         textEdit_2->setObjectName(QStringLiteral("textEdit_2"));
         textEdit_2->setEnabled(false);
-        textEdit_2->setGeometry(QRect(60, 160, 301, 41));
+        textEdit_2->setGeometry(QRect(30, 150, 381, 41));
         textEdit_2->setStyleSheet(QStringLiteral("color:black"));
         pushButton = new QPushButton(AboutUI);
         pushButton->setObjectName(QStringLiteral("pushButton"));

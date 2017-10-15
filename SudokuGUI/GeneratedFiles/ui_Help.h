@@ -70,7 +70,7 @@ public:
                         "t-weight:600;\">Game</span><span style=\" font-size:12pt;\"> and click </span><span style=\" font-size:12pt; font-weight:600;\">Leaderboard</span><span style=\" font-size:12pt;\">.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">To learn more about our work and us, click </span><span style=\" font-size:12pt; font-weight:600;\">About</span><span style=\" font-size:12pt;\">. </span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Thanks for your playing! Having a nice time!</span></p></body></html>", Q_NULLPTR));
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Thanks for your playing! Have a good time!</span></p></body></html>", Q_NULLPTR));
         pushButton->setText(QApplication::translate("Help", "OK", Q_NULLPTR));
     } // retranslateUi
 

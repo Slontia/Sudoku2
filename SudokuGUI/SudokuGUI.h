@@ -8,7 +8,6 @@
 #include <QLineEdit>
 #include <QLCDNumber>
 #include <iostream>
-#include "core.h"
 #include "rank.h"
 #include "storeRankGUI.h"
 
@@ -86,6 +85,7 @@ class Timer;
 class BoardGUI;
 class AboutGUI;
 class HelpGUI;
+class Core;
 
 class SudokuGUI : public QMainWindow
 {

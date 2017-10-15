@@ -191,7 +191,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Sudoku2\core.h" />
     <CustomBuild Include="aboutGUI.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing aboutGUI.h...</Message>
@@ -206,6 +205,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Command|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Command|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  "-I.\GeneratedFiles"</Command>
     </CustomBuild>
+    <ClInclude Include="generate.h" />
     <ClInclude Include="GeneratedFiles\ui_About.h" />
     <ClInclude Include="GeneratedFiles\ui_Help.h" />
     <CustomBuild Include="helpGUI.h">
@@ -308,12 +308,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sudoku2\Sudoku2.vcxproj">
-      <Project>{9ec95845-b8b5-4069-8277-baeac04f3857}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\x64\Release\Core.dll" />
     <CustomBuild Include="Help.ui">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(Identity)...</Message>
@@ -330,7 +324,10 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\x64\Release\Core.lib" />
+    <Library Include="..\GUIBIN\Core.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\GUIBIN\Core.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

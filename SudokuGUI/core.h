@@ -1,10 +1,10 @@
 #pragma once
 #define SIZE 9
 
-class __declspec(dllexport) Core {
+class __declspec(dllexport) Core1 {
 	
 public:
-	Core();
+	Core1();
 
 	/* -c */
 	void generate(int number, int result[][SIZE * SIZE]);

@@ -151,9 +151,6 @@
     <ClInclude Include="difficulty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sudoku2\core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_Board.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
@@ -166,15 +163,18 @@
     <ClInclude Include="GeneratedFiles\ui_Help.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="generate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\x64\Release\Core.dll">
-      <Filter>Source Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\x64\Release\Core.lib">
+    <Library Include="..\GUIBIN\Core.lib">
       <Filter>Source Files</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\GUIBIN\Core.dll">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

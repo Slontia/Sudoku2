@@ -12,7 +12,9 @@
 #include <QString>
 #include "aboutGUI.h"
 #include "helpGUI.h"
+#include "generate.h"
 #define REMAINING_TEXT (QString)"Remaining: "
+#include <malloc.h>
 
 SudokuGUI::SudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
@@ -253,30 +255,52 @@ void SudokuGUI::new_game(int difficulty) {
 	qDebug() << "1111111111" << endl;
 
 	this->unfilled_grid_count = 0;
-	int puzzle_receiver[1][SIZE*SIZE];
+
+	int** puzzle_receiver = new int*[9];
+	for (int i = 0; i < 9; i++) {
+		puzzle_receiver[i] = new int[100];
+		memset(puzzle_receiver[i], 0, sizeof(int) * 100);
+	}
+	//core->set_play(true);
+	core->set_play(true);
+	core->generate(1, difficulty, puzzle_receiver);
+
+	/*int puzzle_receiver0[1][81] = { 0 };
+	int(*p)[1];
+	p[0] = puzzle_receiver0[0];*/
+	
+	/*double arry[5][10] = { 0 };        double(*p)[5];
+
+
+
+	for (int i = 0; i<5; i++)
+
+		p[i] = arry[i];*/
+	//QMessageBox::about(NULL, "1", "1");
 
 	//core->generate(1, 55, 55, true, puzzle_receiver);
 	qDebug() << (long int)core << endl;
-	core->generate(1, difficulty, puzzle_receiver);
-	qDebug() << "2222222" << endl;
 	
+	qDebug() << "2222222" << endl;
+	//QMessageBox::about(NULL, "1", "2");
 
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			tipped[i][j] = 0;
 			int gridno = GET_GRIDNO(i, j);
-			this->puzzle[gridno] = puzzle_receiver[0][gridno];
+			this->puzzle[gridno] = puzzle_receiver[1][gridno];
 			if (puzzle[gridno] == 0) {
 				unfilled_grid_count++;
 			}		
 		}
 	}
 
+	//QMessageBox::about(NULL, "1", "3");
 	char unfilled_grid_count_str[3];
 	sprintf(unfilled_grid_count_str, "%d", unfilled_grid_count);
 	grid_count->setText(REMAINING_TEXT + unfilled_grid_count_str);
-
-	core->solve(puzzle_receiver[0], this->sudoku);
+	//QMessageBox::about(NULL, "1", "4");
+	core->solve(puzzle_receiver[1], this->sudoku);
 
 	int index = 0;
 	int digit;

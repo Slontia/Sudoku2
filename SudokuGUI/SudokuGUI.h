@@ -84,6 +84,8 @@ using namespace std;
 
 class Timer;
 class BoardGUI;
+class AboutGUI;
+class HelpGUI;
 
 class SudokuGUI : public QMainWindow
 {
@@ -99,6 +101,8 @@ private:
 	Ui::SudokuGUIClass ui;
 	BoardGUI* board = NULL;
 	StoreRankGUI* store_rank = NULL;
+	AboutGUI* about = NULL;
+	HelpGUI* help = NULL;
 
 	int cur_rowno = -1;
 	int cur_colno = -1;
@@ -149,4 +153,6 @@ public slots:
 	void filter();
 	void tip();
 	void show_board();
+	void show_about();
+	void show_help();
 };

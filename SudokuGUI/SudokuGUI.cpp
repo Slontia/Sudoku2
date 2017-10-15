@@ -10,6 +10,8 @@
 #include "storeRankGUI.h"
 #include <QCloseEvent>
 #include <QString>
+#include "aboutGUI.h"
+#include "helpGUI.h"
 #define REMAINING_TEXT (QString)"Remaining: "
 
 SudokuGUI::SudokuGUI(QWidget *parent)
@@ -134,7 +136,7 @@ void SudokuGUI::create_input_buttons() {
 		mapper->setMapping(btn, i);
 	}
 	/* Clean */
-	input_buttons[0] = new QPushButton("Clean", this);
+	input_buttons[0] = new QPushButton("Erase", this);
 	QPushButton* clean_button = input_buttons[0];
 	clean_button->setGeometry(570, 345, 2 * BOX_SIZE + 15, BOX_SIZE); // set position & size
 	clean_button->setFont(FUNCTION_FONT); // set fond
@@ -156,6 +158,8 @@ void SudokuGUI::binding_actions() {
 	mapper->setMapping(ui.action_hard, HARD);
 	QObject::connect(mapper, SIGNAL(mapped(int)), this, SLOT(new_puzzle(int)));
 	QObject::connect(ui.action_leading_board, SIGNAL(triggered()), this, SLOT(show_board()));
+	QObject::connect(ui.action_about, SIGNAL(triggered()), this, SLOT(show_about()));
+	QObject::connect(ui.action_help, SIGNAL(triggered()), this, SLOT(show_help()));
 }
 
 /*===========================\
@@ -555,7 +559,7 @@ void SudokuGUI::tip() {
 			if (QMessageBox::Yes == QMessageBox::question(
 				this,
 				"Tip",
-				"Sure to be tipped? \nYour score will not be recorded by rank.",
+				"Sure to be tipped? \nIf tipped, you will not be recorded by rank.",
 				QMessageBox::Yes | QMessageBox::No,
 				QMessageBox::No
 			)) {
@@ -589,7 +593,7 @@ void SudokuGUI::closeEvent(QCloseEvent* event) {
 	if (QMessageBox::Yes == QMessageBox::question(
 		this,
 		"Exit",
-		"Ready to exit?",
+		"Sure to exit?",
 		QMessageBox::Yes | QMessageBox::No,
 		QMessageBox::No
 	)) {
@@ -599,9 +603,29 @@ void SudokuGUI::closeEvent(QCloseEvent* event) {
 		if (store_rank != NULL) {
 			store_rank->close();
 		}
+		if (help != NULL) {
+			help->close();
+		}
+		if (about != NULL) {
+			about->close();
+		}
 		event->accept();
 	}
 	else {
 		event->ignore();
 	}
+}
+
+void SudokuGUI::show_about() {
+	if (about == NULL) {
+		about = new AboutGUI();
+	}
+	about->show();
+}
+
+void SudokuGUI::show_help() {
+	if (help == NULL) {
+		help = new HelpGUI();
+	}
+	help->show();
 }

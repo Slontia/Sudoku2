@@ -77,6 +77,9 @@ void BoardGUI::init_board() {
 			sprintf(h_str, "%000d", h);
 			text += (QString)h_str + ":" + min_str + ":" + s_str + "." + ms_str + "\n";
 		}
+		if (text.length() == 0) {
+			text = "No records on the board. Why don't you become the first?";
+		}
 		texts[mode]->setText(text);
 	}
 }

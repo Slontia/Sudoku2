@@ -19,6 +19,7 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 	this->rank = new Rank();
 
 	ui.setupUi(this);
+	this->setStyleSheet(WINDOW_SYTLE);
 	setFixedSize(760, 560);
 	/* menu */
 	binding_actions();
@@ -42,7 +43,7 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 
 	grid_count = new QLineEdit(this);
 	grid_count->setEnabled(false);
-	grid_count->setGeometry(530, 80, 180, 30);
+	grid_count->setGeometry(540, 72, 180, 30);
 	grid_count->setFont(REMAINING_FONT);
 	grid_count->setText("Sudoku");
 	grid_count->setAlignment(Qt::AlignCenter);
@@ -103,6 +104,7 @@ void SudokuGUI::create_grids() {
 			btn->setEnabled(false);
 			btn->setFont(QFont("Times", 18, QFont::Bold)); // set fond
 			btn->setStyleSheet(CERTAIN_GRID_STYLE); // set color
+			btn->setFont(GRID_FONT);
 			QObject::connect(btn, SIGNAL(clicked()), mapper, SLOT(map()));
 			mapper->setMapping(btn, GET_GRIDNO(i, j));
 		}
@@ -127,6 +129,7 @@ void SudokuGUI::create_input_buttons() {
 		); // set position
 		btn->setFont(QFont("Times", 18, QFont::Bold)); // set fond
 		btn->setStyleSheet(INPUT_BOTTON_STYLE); // set color
+		btn->setFont(GRID_FONT);
 		QObject::connect(btn, SIGNAL(clicked()), mapper, SLOT(map()));
 		mapper->setMapping(btn, i);
 	}
@@ -164,6 +167,7 @@ void SudokuGUI::cancel_checking() {
 	if (checking) {
 		checking = false;
 		restore_grids_style();
+		
 	}
 }
 
@@ -171,6 +175,8 @@ void SudokuGUI::cancel_tracking() {
 	if (tracking) {
 		tracking = false;
 		func_buttons[TRACK]->setStyleSheet(FUNCTION_BUTTON_STYLE);
+		func_buttons[TIP]->setEnabled(false);
+		func_buttons[TIP]->setStyleSheet(DISABLE_FUNCTION_STYLE);
 		restore_grids_style();
 	}
 }
@@ -180,6 +186,9 @@ void SudokuGUI::restore_grids_style() {
 		for (int j = 0; j < SIZE; j++) {
 			QPushButton* grid = buttons[i][j];
 			RESTORE_GRID_STYLE(grid); // restore style
+			if (tipped[i][j]) {
+				grid->setStyleSheet(TIP_GRID_STYLE);
+			}
 		}
 	}
 	if (curbtn != NULL && !tracking) {
@@ -237,6 +246,7 @@ void SudokuGUI::new_game(int difficulty) {
 	FILE* fout;
 
 	this->mode = difficulty - 1;
+	this->tipped_bool = false;
 
 	qDebug() << "1111111111" << endl;
 
@@ -252,6 +262,7 @@ void SudokuGUI::new_game(int difficulty) {
 	fout = fopen("C:/Users/65486/Desktop/debug.txt", "w");
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
+			tipped[i][j] = 0;
 			int gridno = GET_GRIDNO(i, j);
 			this->puzzle[gridno] = puzzle_receiver[0][gridno];
 			if (puzzle[gridno] == 0) {
@@ -329,6 +340,8 @@ void SudokuGUI::new_game(int difficulty) {
 	qDebug() << "777777777" << endl;
 
 	curbtn = NULL;
+	func_buttons[TIP]->setEnabled(false);
+	func_buttons[TIP]->setStyleSheet(DISABLE_FUNCTION_STYLE);
 }
 
 
@@ -384,6 +397,8 @@ void SudokuGUI::record_button(int gridno) {
 	curbtn = buttons[cur_rowno][cur_colno];
 	//curbtn = (QPushButton*)QObject::sender();
 	curbtn->setStyleSheet(CURRENT_GRID_STYLE);
+	func_buttons[TIP]->setEnabled(true);
+	func_buttons[TIP]->setStyleSheet(FUNCTION_BUTTON_STYLE);
 }
 
 
@@ -439,7 +454,12 @@ bool SudokuGUI::judge() {
 				pass = false;
 			}
 			else {
-				RESTORE_GRID_STYLE(buttons[i][j]);
+				if (tipped[i][j]) {
+					buttons[i][j]->setStyleSheet(TIP_GRID_STYLE);
+				}
+				else {
+					RESTORE_GRID_STYLE(buttons[i][j]);
+				}
 			}
 		}
 	}
@@ -462,7 +482,7 @@ bool SudokuGUI::judge() {
 		bool exist = rank->fetch_rank(mode, ENTRYSIZE, name, time_double_lowest);
 		qDebug() << time_int << endl;
 		qDebug() << (int)time_double_lowest << endl;
-		if (!exist || time_int < (int)time_double_lowest) {
+		if (!tipped_bool && (!exist || time_int < (int)time_double_lowest)) {
 			show_store_rank();
 		}
 	}
@@ -503,6 +523,8 @@ void SudokuGUI::set_tracking() {
 		tracking = true;
 		if (curbtn != NULL) {
 			curbtn->setStyleSheet(UNCERTAIN_GRID_STYLE);
+			func_buttons[TIP]->setEnabled(true);
+			func_buttons[TIP]->setStyleSheet(FUNCTION_BUTTON_STYLE);
 		}
 	}
 }
@@ -552,10 +574,27 @@ void SudokuGUI::filter() {
 
 void SudokuGUI::tip() {
 	if (curbtn != NULL) {
+		if (!tipped_bool) {
+			if (QMessageBox::Yes == QMessageBox::question(
+				this,
+				"Tip",
+				"Sure to be tipped? \nYour score will not be recorded by rank.",
+				QMessageBox::Yes | QMessageBox::No,
+				QMessageBox::No
+			)) {
+				tipped_bool = true;
+			}
+			else {
+				return;
+			}
+		}
 		set_number(sudoku[GET_GRIDNO(cur_rowno, cur_colno)]);
 		curbtn->setEnabled(false);
-		curbtn->setStyleSheet(CERTAIN_GRID_STYLE);
+		curbtn->setStyleSheet(TIP_GRID_STYLE);
 		curbtn = NULL;
+		func_buttons[TIP]->setEnabled(false);
+		func_buttons[TIP]->setStyleSheet(DISABLE_FUNCTION_STYLE);
+		tipped[cur_rowno][cur_colno] = 1;
 		cur_rowno = -1;
 		cur_colno = -1;
 	}
@@ -577,6 +616,12 @@ void SudokuGUI::closeEvent(QCloseEvent* event) {
 		QMessageBox::Yes | QMessageBox::No,
 		QMessageBox::No
 	)) {
+		if (board != NULL) {
+			board->close();
+		}
+		if (store_rank != NULL) {
+			store_rank->close();
+		}
 		event->accept();
 	}
 	else {

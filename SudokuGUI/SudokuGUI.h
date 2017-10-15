@@ -16,12 +16,21 @@
 #define BOX_SIZE 50
 
 /* STYLE */
-#define FUNCTION_FONT QFont("Times", 16, QFont::Bold)
-#define REMAINING_FONT QFont("Times", 14, QFont::Bold)
-#define UNCERTAIN_GRID_STYLE "QPushButton{\
+#define FUNCTION_FONT QFont("Consolas", 16, QFont::Normal)
+#define REMAINING_FONT QFont("Consolas", 14, QFont::Normal)
+#define GRID_FONT QFont("Consolas", 18, QFont::Normal)
+#define UNCERTAIN_GRID_STYLE "QPushButton:hover{\
 	background-color:#AFEEEE;\
+}"\
+"QPushButton{\
+	background-color:#66CCFF;\
 }"
 #define CERTAIN_GRID_STYLE "QPushButton{\
+	color:#1C2460;\
+	background-color:#99CCFF;\
+}"
+#define TIP_GRID_STYLE "QPushButton{\
+	color:#1E90FF;\
 	background-color:#99CCFF;\
 }"
 #define WRONG_GRID_STYLE "QPushButton{\
@@ -49,6 +58,7 @@
 #define DISABLE_FUNCTION_STYLE "QPushButton{\
 	background-color:#fcf8ab;\
 }"
+#define WINDOW_SYTLE ""
 
 #define EASY_BEST_FILE "ranking/easy.txt"
 #define NORMAL_FILE "ranking/normal.txt"
@@ -100,6 +110,7 @@ private:
 
 	Timer* timer = NULL;		// -- timer
 	int numbers[SIZE][SIZE];	// -- the digit of grids
+	int tipped[SIZE][SIZE];
 	bool checking = false;		// -- red grids exists
 	bool tracking = false;		// -- is tracking numbers?
 	int difficulty = 0;			// -- difficuly
@@ -107,6 +118,7 @@ private:
 	int sudoku[SIZE * SIZE];	// -- the final sudoku
 	int puzzle[SIZE * SIZE]; // -- puzzle
 	int mode = 0;
+	bool tipped_bool = false;
 
 	Core* core = NULL;
 	Rank* rank = NULL;

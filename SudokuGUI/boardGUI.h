@@ -34,4 +34,8 @@ private:
 	QTextEdit* texts[MODE_COUNT];
 
 	void show_board();
+
+public slots:
+	void clear_board();
+	void enter();
 };

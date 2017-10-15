@@ -32,6 +32,7 @@ StoreRankGUI::StoreRankGUI(Rank* rank, BoardGUI* board, QWidget *parent)
 
 	submit_btn = new QPushButton("Submit", this);
 	submit_btn->setGeometry(QRect(30, 120, 80, 30));
+	submit_btn->setDefault(true);
 	QObject::connect(submit_btn, SIGNAL(clicked()), this, SLOT(submit()));
 
 	cancel_btn = new QPushButton("Cancel", this);

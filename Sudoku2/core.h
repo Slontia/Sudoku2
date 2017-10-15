@@ -1,7 +1,13 @@
 #pragma once
 #include "stdafx.h"
 
-class __declspec(dllexport) Core {
+#ifdef _LABEL_API_EXPORT_
+#define LABEL_IMG_API __declspec(dllexport)
+#else
+#define LABEL_IMG_API __declspec(dllimport)
+#endif
+
+class LABEL_IMG_API Core {
 
 public:
 	Core();

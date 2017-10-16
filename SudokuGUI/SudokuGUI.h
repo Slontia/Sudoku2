@@ -125,7 +125,6 @@ private:
 	bool tipped_bool = false;
 
 	Core* core = NULL;
-	Rank* rank = NULL;
 
 	void create_grids();
 	void create_input_buttons();

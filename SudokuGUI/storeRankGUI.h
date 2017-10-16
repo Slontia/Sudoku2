@@ -16,14 +16,13 @@ class StoreRankGUI : public QWidget
 	Q_OBJECT
 
 public:
-	StoreRankGUI(Rank* rank, BoardGUI* board, QWidget *parent = Q_NULLPTR);
+	StoreRankGUI(BoardGUI* board, QWidget *parent = Q_NULLPTR);
 	void set_informations(int mode, QTime* time);
 	static int time2int(QTime* time);
 	
 
 private:
 	QLineEdit* input_edit = NULL;
-	Rank* rank = NULL;
 	QPushButton* submit_btn = NULL;
 	QPushButton* cancel_btn = NULL;
 	int mode = 0;

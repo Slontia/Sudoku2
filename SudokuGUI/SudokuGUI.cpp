@@ -18,7 +18,6 @@ SudokuGUI::SudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
 {
 	core = new Core();
-	this->rank = new Rank();
 
 	ui.setupUi(this);
 	this->setStyleSheet(WINDOW_SYTLE);
@@ -179,8 +178,8 @@ void SudokuGUI::cancel_tracking() {
 	if (tracking) {
 		tracking = false;
 		func_buttons[TRACK]->setStyleSheet(FUNCTION_BUTTON_STYLE);
-		func_buttons[TIP]->setEnabled(false);
-		func_buttons[TIP]->setStyleSheet(DISABLE_FUNCTION_STYLE);
+		//func_buttons[TIP]->setEnabled(false);
+		//func_buttons[TIP]->setStyleSheet(DISABLE_FUNCTION_STYLE);
 		restore_grids_style();
 	}
 }
@@ -208,7 +207,13 @@ void SudokuGUI::track_number(int x) {
 				buttons[i][j]->setStyleSheet(MARK_GRID_STYLE);
 			}
 			else {
-				RESTORE_GRID_STYLE(buttons[i][j]); // restore style
+				if (tipped[i][j]) {
+					buttons[i][j]->setStyleSheet(TIP_GRID_STYLE);
+				}
+				else {
+					RESTORE_GRID_STYLE(buttons[i][j]); // restore style
+				}
+				
 			}
 		}
 	}
@@ -249,18 +254,9 @@ void SudokuGUI::set_number(int x) {
 void SudokuGUI::new_game(int difficulty) {
 	this->mode = difficulty - 1;
 	this->tipped_bool = false;
-
-	qDebug() << "1111111111" << endl;
-
 	this->unfilled_grid_count = 0;
 	int puzzle_receiver[1][SIZE*SIZE];
-
-	//core->generate(1, 55, 55, true, puzzle_receiver);
-	qDebug() << (long int)core << endl;
 	core->generate(1, difficulty, puzzle_receiver);
-	qDebug() << "2222222" << endl;
-	
-
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
 			tipped[i][j] = 0;
@@ -271,16 +267,13 @@ void SudokuGUI::new_game(int difficulty) {
 			}		
 		}
 	}
-
 	char unfilled_grid_count_str[3];
 	sprintf(unfilled_grid_count_str, "%d", unfilled_grid_count);
 	grid_count->setText(REMAINING_TEXT + unfilled_grid_count_str);
-
 	core->solve(puzzle_receiver[0], this->sudoku);
 
 	int index = 0;
 	int digit;
-
 	QPushButton* btn;
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
@@ -302,8 +295,6 @@ void SudokuGUI::new_game(int difficulty) {
 		}
 	}
 
-	qDebug() << "5555555555" << endl;
-
 	enable_buttons();
 	if (difficulty <= NORMAL) {
 		func_buttons[FILTER]->setEnabled(false);
@@ -313,12 +304,7 @@ void SudokuGUI::new_game(int difficulty) {
 		func_buttons[TRACK]->setEnabled(false);
 		func_buttons[TRACK]->setStyleSheet(DISABLE_FUNCTION_STYLE);
 	}
-
-	qDebug() << "6666666666" << endl;
-
 	timer->start();
-
-	qDebug() << "777777777" << endl;
 
 	curbtn = NULL;
 	func_buttons[TIP]->setEnabled(false);
@@ -357,7 +343,7 @@ void SudokuGUI::enable_buttons() {
 
 void SudokuGUI::show_store_rank() {
 	if (store_rank == NULL) {
-		store_rank = new StoreRankGUI(rank, board);
+		store_rank = new StoreRankGUI(board);
 	}
 	store_rank->set_informations(mode, timer->get_time());
 	store_rank->show();
@@ -460,7 +446,9 @@ bool SudokuGUI::judge() {
 		int time_int = StoreRankGUI::time2int(timer->get_time());
 		char name[NAMESIZE];
 		double time_double_lowest = 0;
+		Rank* rank = new Rank();
 		bool exist = rank->fetch_rank(mode, ENTRYSIZE, name, time_double_lowest);
+		delete rank;
 		qDebug() << time_int << endl;
 		qDebug() << (int)time_double_lowest << endl;
 		if (!tipped_bool && (!exist || time_int < (int)time_double_lowest)) {
@@ -583,7 +571,7 @@ void SudokuGUI::tip() {
 
 void SudokuGUI::show_board() {
 	if (this->board == NULL) {
-		this->board = new BoardGUI(rank);
+		this->board = new BoardGUI();
 	}
 	this->board->init_board();
 	this->board->show();

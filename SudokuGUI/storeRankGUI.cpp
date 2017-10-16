@@ -12,12 +12,11 @@
 	}"
 
 
-StoreRankGUI::StoreRankGUI(Rank* rank, BoardGUI* board, QWidget *parent)
+StoreRankGUI::StoreRankGUI(BoardGUI* board, QWidget *parent)
 	: QWidget(parent) {
 	//ui.setupUi(this);
 	setEnabled(true);
 	setFixedSize(250, 170);
-	this->rank = rank;
 	this->board = board;
 
 	QTextEdit* text = new QTextEdit(this);
@@ -91,11 +90,13 @@ void StoreRankGUI::submit() {
 	// this->rank->clear();
 	qDebug() << "mode: " << mode << endl;
 	//this->rank->record(mode, (double)time_int, name_c);
-	this->rank->record(mode, (double)time_int, name_c);
-	this->rank->encrypt_flush(ENCRYPT);
+	Rank* rank = new Rank();
+	rank->record(mode, (double)time_int, name_c);
+	rank->encrypt_flush(ENCRYPT);
+	delete rank;
 	
 	if (this->board == NULL) {
-		this->board = new BoardGUI(rank);
+		this->board = new BoardGUI();
 	}
 	this->board->change_tab(mode);
 	this->board->init_board();

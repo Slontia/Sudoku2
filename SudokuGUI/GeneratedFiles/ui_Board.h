@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -21,6 +22,8 @@ QT_BEGIN_NAMESPACE
 class Ui_Form
 {
 public:
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
 
     void setupUi(QWidget *Form)
     {
@@ -28,6 +31,15 @@ public:
             Form->setObjectName(QStringLiteral("Form"));
         Form->setEnabled(true);
         Form->resize(388, 438);
+        scrollArea = new QScrollArea(Form);
+        scrollArea->setObjectName(QStringLiteral("scrollArea"));
+        scrollArea->setGeometry(QRect(170, 170, 120, 87));
+        scrollArea->setContextMenuPolicy(Qt::CustomContextMenu);
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 118, 85));
+        scrollArea->setWidget(scrollAreaWidgetContents);
 
         retranslateUi(Form);
 

@@ -19,7 +19,7 @@ class BoardGUI : public QWidget
 	Q_OBJECT
 
 public:
-	BoardGUI(Rank* rank, QWidget *parent = Q_NULLPTR);
+	BoardGUI(QWidget *parent = Q_NULLPTR);
 	void init_board();
 	void change_tab(int mode);
 
@@ -27,7 +27,6 @@ private:
 	char* names[MODE_COUNT][BOARD_COUNT_MAX];
 	double times[MODE_COUNT][BOARD_COUNT_MAX];
 	int lengths[MODE_COUNT] = { 0 };
-	Rank* rank = NULL;
 
 	QTabWidget* tabWidget;
 	QWidget* boards[MODE_COUNT];

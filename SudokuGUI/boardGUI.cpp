@@ -13,7 +13,7 @@
 #define NORMAL_INDEX 1
 #define HARD_INDEX 2
 
-BoardGUI::BoardGUI(Rank* rank, QWidget *parent)
+BoardGUI::BoardGUI(QWidget *parent)
 	: QWidget(parent) {
 	//ui.setupUi(this);
 	setEnabled(true);
@@ -48,14 +48,15 @@ BoardGUI::BoardGUI(Rank* rank, QWidget *parent)
 	enter->setDefault(true);
 	QObject::connect(enter, SIGNAL(clicked()), this, SLOT(enter()));
 
-	this->rank = rank;
 	init_board();
 }
 
 void BoardGUI::init_board() {
 	for (int mode = 0; mode < MODE_COUNT; mode++) {
+		Rank* rank = new Rank();
 		lengths[mode] = rank->fetch_rank
 			(mode, 1, BOARD_COUNT_MAX, names[mode], times[mode]);
+		delete rank;
 		QString text = "";
 		for (int i = 0; i < lengths[mode]; i++) {
 			char rank_num[3];
@@ -100,8 +101,10 @@ void BoardGUI::clear_board() {
 		QMessageBox::Yes | QMessageBox::No,
 		QMessageBox::No
 	)) {
+		Rank* rank = new Rank();
 		rank->clear();
 		rank->encrypt_flush(ENCRYPT);
+		delete rank;
 		init_board();
 	}
 }

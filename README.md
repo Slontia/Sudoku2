@@ -6,29 +6,18 @@ Software Engineering, BUAA 结对项目
 
 ## 使用说明
 
-Sudoku is a worldwide prevailing puzzle game.
+**Sudoku** is a worldwide prevailing puzzle game.<br>
+The objective is to fill a 9\*9 grid with digits so that each column, each row, and each of the nine 3\*3 subgrids that compose the grid contains all of the digits from 1 to 9.<br>
+To start a new game, click **Game** at the top of the window, click **New Game** and select a mode from Easy, Normal and Hard.<br>
+During the play, to fill in digits, click empty blue buttons on the left, which will be marked by yellow, to select a cell, and click fuchsin buttons with digits on the right. <br>
 
-The objective is to fill a 9*9 grid with digits so that each column, each row, and each of the nine 3*3 subgrids that compose the grid contains all of the digits from 1 to 9.
-
-To start a new game, click Game at the top of the window, click New Game and select a mode from Easy, Normal and Hard.
-
-During the play, to fill in digits, click empty blue buttons on the left, which will be marked by yellow, to select a cell, and click fuchsin buttons with digits on the right. 
-
-<br>
-
-To erase your answers, select a digit and click Erase.
-
-To check or submit your current answer, click Check.
-
-To locate cells of a specific number, click a digit on the right and click Track.
-
-To see the answer of a cell, select it and click Tip. The result of the current game will not be admitted to the leaderboard if you have used any tips.
-
-To see the leaderboard, click Game and click Leaderboard.
-
-To filter possibilities of a cell, select it and click Filter, which returns a possible solution for the cell at each click.
-
-To learn more about our work and us, click About. 
+ - To erase your answers, select a digit and click **Erase**.
+ - To check or submit your current answer, click **Check**.
+ - To locate cells of a specific number, click a digit on the right and click **Track**.
+ - To see the answer of a cell, select it and click **Tip**. The result of the current game will not be admitted to the leaderboard if you have used any tips.
+ - To see the leaderboard, click **Game** and click **Leaderboard**.
+ - To filter possibilities of a cell, select it and click **Filter**, which returns a possible solution for the cell at each click.
+ - To learn more about our work and us, click **About**. 
 
 ## 实现功能
 
